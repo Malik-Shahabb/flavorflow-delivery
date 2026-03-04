@@ -1,16 +1,57 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/context/AuthContext";
 
 const LoginPage = () => {
   const [isRegister, setIsRegister] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  if (user) {
+    navigate("/");
+    return null;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success(isRegister ? "Account created! (Demo)" : "Logged in! (Demo)");
+    setLoading(true);
+
+    try {
+      if (isRegister) {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: window.location.origin,
+            data: { full_name: fullName, phone },
+          },
+        });
+        if (error) throw error;
+        toast.success("Account created! Check your email to confirm.");
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) throw error;
+        toast.success("Logged in successfully!");
+        navigate("/");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Authentication failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -30,25 +71,52 @@ const LoginPage = () => {
           {isRegister && (
             <div>
               <Label>Full Name</Label>
-              <Input required placeholder="John Doe" className="mt-1" />
+              <Input
+                required
+                placeholder="John Doe"
+                className="mt-1"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
             </div>
           )}
           <div>
             <Label>Email</Label>
-            <Input required type="email" placeholder="john@example.com" className="mt-1" />
+            <Input
+              required
+              type="email"
+              placeholder="john@example.com"
+              className="mt-1"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <div>
             <Label>Password</Label>
-            <Input required type="password" placeholder="••••••••" className="mt-1" />
+            <Input
+              required
+              type="password"
+              placeholder="••••••••"
+              className="mt-1"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              minLength={6}
+            />
           </div>
           {isRegister && (
             <div>
               <Label>Phone Number</Label>
-              <Input type="tel" placeholder="+1 (555) 000-0000" className="mt-1" />
+              <Input
+                type="tel"
+                placeholder="+1 (555) 000-0000"
+                className="mt-1"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
             </div>
           )}
-          <Button type="submit" className="w-full rounded-full" size="lg">
-            {isRegister ? "Create Account" : "Sign In"}
+          <Button type="submit" className="w-full rounded-full" size="lg" disabled={loading}>
+            {loading ? "Please wait..." : isRegister ? "Create Account" : "Sign In"}
           </Button>
         </form>
 
