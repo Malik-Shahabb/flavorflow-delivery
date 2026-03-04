@@ -1,11 +1,19 @@
-import { Link } from "react-router-dom";
-import { ShoppingCart, User, Search } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { ShoppingCart, User, Search, LogOut } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const { totalItems } = useCart();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/login");
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-lg">
@@ -43,11 +51,17 @@ const Navbar = () => {
               )}
             </Button>
           </Link>
-          <Link to="/login">
-            <Button variant="ghost" size="icon" className="text-muted-foreground">
-              <User className="h-5 w-5" />
+          {user ? (
+            <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={handleSignOut}>
+              <LogOut className="h-5 w-5" />
             </Button>
-          </Link>
+          ) : (
+            <Link to="/login">
+              <Button variant="ghost" size="icon" className="text-muted-foreground">
+                <User className="h-5 w-5" />
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>
