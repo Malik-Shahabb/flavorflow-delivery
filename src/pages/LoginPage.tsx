@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,12 +15,23 @@ const LoginPage = () => {
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isReady } = useAuth();
 
-  if (user) {
-    navigate("/");
-    return null;
+  useEffect(() => {
+    if (isReady && user) {
+      navigate("/");
+    }
+  }, [user, isReady, navigate]);
+
+  if (!isReady) {
+    return (
+      <div className="flex min-h-[80vh] items-center justify-center">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
   }
+
+  if (user) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
