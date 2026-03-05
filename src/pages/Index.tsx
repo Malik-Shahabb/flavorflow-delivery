@@ -3,10 +3,41 @@ import { motion } from "framer-motion";
 import { ArrowRight, MapPin, Clock, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import RestaurantCard from "@/components/RestaurantCard";
-import { restaurants } from "@/data/restaurants";
+import { restaurants as staticRestaurants, Restaurant } from "@/data/restaurants";
+import { useRestaurants } from "@/hooks/useRestaurants";
 
 const Index = () => {
-  const featured = restaurants.filter((r) => r.isOpen).slice(0, 4);
+  const { data: dbRestaurants } = useRestaurants();
+
+  const allRestaurants: Restaurant[] = [
+    ...(dbRestaurants || []).map((r) => ({
+      id: r.id,
+      name: r.name,
+      cuisine: r.cuisine,
+      rating: r.rating,
+      reviewCount: r.review_count,
+      deliveryTime: r.delivery_time,
+      deliveryFee: r.delivery_fee,
+      minOrder: r.min_order,
+      image: r.image,
+      address: r.address,
+      isOpen: r.is_open,
+      tags: r.tags || [],
+      menu: (r.menu || []).map((m) => ({
+        id: m.id,
+        name: m.name,
+        description: m.description,
+        price: m.price,
+        image: m.image,
+        category: m.category,
+        isVeg: m.is_veg,
+        isPopular: m.is_popular,
+      })),
+    })),
+    ...staticRestaurants,
+  ];
+
+  const featured = allRestaurants.filter((r) => r.isOpen).slice(0, 4);
 
   return (
     <div className="min-h-screen">
@@ -106,7 +137,7 @@ const Index = () => {
         <div className="container text-center">
           <h2 className="font-serif text-3xl text-primary-foreground">Own a Restaurant?</h2>
           <p className="mt-2 text-primary-foreground/80">Partner with FeastFleet and grow your business</p>
-          <Link to="/login">
+          <Link to="/register-restaurant">
             <Button size="lg" variant="secondary" className="mt-6 rounded-full font-semibold">
               Register Your Restaurant
             </Button>

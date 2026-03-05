@@ -13,6 +13,7 @@ import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrdersPage from "./pages/OrdersPage";
 import LoginPage from "./pages/LoginPage";
+import RegisterRestaurantPage from "./pages/RegisterRestaurantPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/orders" element={<OrdersPage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/register-restaurant" element={<RegisterRestaurantPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

@@ -14,7 +14,104 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      menu_items: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          id: string
+          image: string
+          is_popular: boolean
+          is_veg: boolean
+          name: string
+          price: number
+          restaurant_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          image?: string
+          is_popular?: boolean
+          is_veg?: boolean
+          name: string
+          price: number
+          restaurant_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          image?: string
+          is_popular?: boolean
+          is_veg?: boolean
+          name?: string
+          price?: number
+          restaurant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_items_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      restaurants: {
+        Row: {
+          address: string
+          created_at: string
+          cuisine: string
+          delivery_fee: number
+          delivery_time: string
+          id: string
+          image: string
+          is_open: boolean
+          min_order: number
+          name: string
+          owner_id: string
+          rating: number
+          review_count: number
+          tags: string[]
+        }
+        Insert: {
+          address: string
+          created_at?: string
+          cuisine: string
+          delivery_fee?: number
+          delivery_time?: string
+          id?: string
+          image?: string
+          is_open?: boolean
+          min_order?: number
+          name: string
+          owner_id: string
+          rating?: number
+          review_count?: number
+          tags?: string[]
+        }
+        Update: {
+          address?: string
+          created_at?: string
+          cuisine?: string
+          delivery_fee?: number
+          delivery_time?: string
+          id?: string
+          image?: string
+          is_open?: boolean
+          min_order?: number
+          name?: string
+          owner_id?: string
+          rating?: number
+          review_count?: number
+          tags?: string[]
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

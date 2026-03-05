@@ -4,7 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import RestaurantCard from "@/components/RestaurantCard";
-import { restaurants } from "@/data/restaurants";
+import { restaurants as staticRestaurants, Restaurant } from "@/data/restaurants";
+import { useRestaurants } from "@/hooks/useRestaurants";
 
 const cuisineFilters = ["All", "Chinese", "Italian", "Indian", "Japanese", "American", "Mediterranean"];
 
@@ -12,9 +13,38 @@ const RestaurantsPage = () => {
   const [search, setSearch] = useState("");
   const [activeCuisine, setActiveCuisine] = useState("All");
   const [showOpenOnly, setShowOpenOnly] = useState(false);
+  const { data: dbRestaurants } = useRestaurants();
+
+  const allRestaurants: Restaurant[] = useMemo(() => {
+    const dbMapped: Restaurant[] = (dbRestaurants || []).map((r) => ({
+      id: r.id,
+      name: r.name,
+      cuisine: r.cuisine,
+      rating: r.rating,
+      reviewCount: r.review_count,
+      deliveryTime: r.delivery_time,
+      deliveryFee: r.delivery_fee,
+      minOrder: r.min_order,
+      image: r.image,
+      address: r.address,
+      isOpen: r.is_open,
+      tags: r.tags || [],
+      menu: (r.menu || []).map((m) => ({
+        id: m.id,
+        name: m.name,
+        description: m.description,
+        price: m.price,
+        image: m.image,
+        category: m.category,
+        isVeg: m.is_veg,
+        isPopular: m.is_popular,
+      })),
+    }));
+    return [...dbMapped, ...staticRestaurants];
+  }, [dbRestaurants]);
 
   const filtered = useMemo(() => {
-    return restaurants.filter((r) => {
+    return allRestaurants.filter((r) => {
       const matchSearch =
         r.name.toLowerCase().includes(search.toLowerCase()) ||
         r.cuisine.toLowerCase().includes(search.toLowerCase());
@@ -23,7 +53,7 @@ const RestaurantsPage = () => {
       const matchOpen = !showOpenOnly || r.isOpen;
       return matchSearch && matchCuisine && matchOpen;
     });
-  }, [search, activeCuisine, showOpenOnly]);
+  }, [search, activeCuisine, showOpenOnly, allRestaurants]);
 
   return (
     <div className="min-h-screen pb-16">
