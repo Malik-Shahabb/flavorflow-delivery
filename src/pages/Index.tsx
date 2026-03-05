@@ -137,7 +137,7 @@ const Index = () => {
         <div className="container text-center">
           <h2 className="font-serif text-3xl text-primary-foreground">Own a Restaurant?</h2>
           <p className="mt-2 text-primary-foreground/80">Partner with FeastFleet and grow your business</p>
-          <Link to="/login">
+          <Link to="/register-restaurant">
             <Button size="lg" variant="secondary" className="mt-6 rounded-full font-semibold">
               Register Your Restaurant
             </Button>

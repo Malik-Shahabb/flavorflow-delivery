@@ -3,20 +3,60 @@ import { ArrowLeft, Star, Clock, Truck, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import MenuItemCard from "@/components/MenuItemCard";
-import { restaurants } from "@/data/restaurants";
+import { restaurants as staticRestaurants, Restaurant, MenuItem } from "@/data/restaurants";
 import { useCart } from "@/context/CartContext";
 import { useMemo } from "react";
+import { useRestaurant } from "@/hooks/useRestaurants";
 
 const RestaurantDetailPage = () => {
   const { id } = useParams();
-  const restaurant = restaurants.find((r) => r.id === id);
   const { items, subtotal } = useCart();
+  const { data: dbRestaurant, isLoading } = useRestaurant(id);
+
+  // Try static data first, then DB
+  const restaurant: Restaurant | null = useMemo(() => {
+    const staticMatch = staticRestaurants.find((r) => r.id === id);
+    if (staticMatch) return staticMatch;
+
+    if (!dbRestaurant) return null;
+    return {
+      id: dbRestaurant.id,
+      name: dbRestaurant.name,
+      cuisine: dbRestaurant.cuisine,
+      rating: dbRestaurant.rating,
+      reviewCount: dbRestaurant.review_count,
+      deliveryTime: dbRestaurant.delivery_time,
+      deliveryFee: dbRestaurant.delivery_fee,
+      minOrder: dbRestaurant.min_order,
+      image: dbRestaurant.image,
+      address: dbRestaurant.address,
+      isOpen: dbRestaurant.is_open,
+      tags: dbRestaurant.tags || [],
+      menu: (dbRestaurant.menu || []).map((m) => ({
+        id: m.id,
+        name: m.name,
+        description: m.description,
+        price: m.price,
+        image: m.image,
+        category: m.category,
+        isVeg: m.is_veg,
+        isPopular: m.is_popular,
+      })),
+    };
+  }, [id, dbRestaurant]);
 
   const categories = useMemo(() => {
     if (!restaurant) return [];
-    const cats = [...new Set(restaurant.menu.map((m) => m.category))];
-    return cats;
+    return [...new Set(restaurant.menu.map((m) => m.category))];
   }, [restaurant]);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p className="text-muted-foreground">Loading restaurant...</p>
+      </div>
+    );
+  }
 
   if (!restaurant) {
     return (
@@ -70,18 +110,22 @@ const RestaurantDetailPage = () => {
 
       {/* Menu */}
       <div className="container mt-8">
-        {categories.map((cat) => (
-          <div key={cat} className="mb-8">
-            <h2 className="font-serif text-xl text-foreground mb-4">{cat}</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              {restaurant.menu
-                .filter((m) => m.category === cat)
-                .map((item) => (
-                  <MenuItemCard key={item.id} item={item} restaurantId={restaurant.id} restaurantName={restaurant.name} />
-                ))}
+        {categories.length === 0 ? (
+          <p className="py-12 text-center text-muted-foreground">No menu items available yet.</p>
+        ) : (
+          categories.map((cat) => (
+            <div key={cat} className="mb-8">
+              <h2 className="font-serif text-xl text-foreground mb-4">{cat}</h2>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {restaurant.menu
+                  .filter((m) => m.category === cat)
+                  .map((item) => (
+                    <MenuItemCard key={item.id} item={item} restaurantId={restaurant.id} restaurantName={restaurant.name} />
+                  ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       {/* Floating cart bar */}
