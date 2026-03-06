@@ -7,6 +7,7 @@ import { restaurants as staticRestaurants, Restaurant, MenuItem } from "@/data/r
 import { useCart } from "@/context/CartContext";
 import { useMemo } from "react";
 import { useRestaurant } from "@/hooks/useRestaurants";
+import { useAuth } from "@/context/AuthContext";
 
 const RestaurantDetailPage = () => {
   const { id } = useParams();
