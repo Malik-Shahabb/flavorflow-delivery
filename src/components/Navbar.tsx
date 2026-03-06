@@ -53,9 +53,14 @@ const Navbar = () => {
           </Link>
           {user ? (
             <div className="flex items-center gap-2">
-              <span className="hidden text-sm font-medium text-foreground md:inline">
-                {user.user_metadata?.full_name || user.email}
-              </span>
+              <Link to="/profile">
+                <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
+                  <User className="h-5 w-5" />
+                  <span className="hidden text-sm font-medium text-foreground md:inline">
+                    {user.user_metadata?.full_name || user.email}
+                  </span>
+                </Button>
+              </Link>
               <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={handleSignOut}>
                 <LogOut className="h-5 w-5" />
               </Button>
