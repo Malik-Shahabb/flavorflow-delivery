@@ -12,7 +12,9 @@ import { useAuth } from "@/context/AuthContext";
 const RestaurantDetailPage = () => {
   const { id } = useParams();
   const { items, subtotal } = useCart();
+  const { user } = useAuth();
   const { data: dbRestaurant, isLoading } = useRestaurant(id);
+  const isOwner = user && dbRestaurant && dbRestaurant.owner_id === user.id;
 
   // Try static data first, then DB
   const restaurant: Restaurant | null = useMemo(() => {
