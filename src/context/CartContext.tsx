@@ -9,6 +9,7 @@ interface CartContextType {
   clearCart: () => void;
   totalItems: number;
   subtotal: number;
+  orders: Order[];
   currentOrder: Order | null;
   placeOrder: (deliveryFee: number) => void;
   advanceOrderStatus: () => void;
@@ -18,13 +19,11 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [currentOrder, setCurrentOrder] = useState<Order | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   const addItem = useCallback((item: MenuItem, restaurantId: string, restaurantName: string) => {
     setItems((prev) => {
-      // Check if adding from a different restaurant
       if (prev.length > 0 && prev[0].restaurantId !== restaurantId) {
-        // Clear cart and add new item
         return [{ menuItem: item, quantity: 1, restaurantId, restaurantName }];
       }
       const existing = prev.find((ci) => ci.menuItem.id === item.id);
@@ -67,27 +66,30 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         estimatedDelivery: "30-40 min",
         createdAt: new Date(),
       };
-      setCurrentOrder(order);
+      setOrders((prev) => [order, ...prev]);
       setItems([]);
     },
     [items, subtotal]
   );
 
   const advanceOrderStatus = useCallback(() => {
-    setCurrentOrder((prev) => {
-      if (!prev) return null;
+    setOrders((prev) => {
+      if (prev.length === 0) return prev;
+      const latest = prev[0];
       const flow: Order["status"][] = ["confirmed", "preparing", "out-for-delivery", "delivered"];
-      const idx = flow.indexOf(prev.status);
+      const idx = flow.indexOf(latest.status);
       if (idx < flow.length - 1) {
-        return { ...prev, status: flow[idx + 1] };
+        return [{ ...latest, status: flow[idx + 1] }, ...prev.slice(1)];
       }
       return prev;
     });
   }, []);
 
+  const currentOrder = orders.length > 0 ? orders[0] : null;
+
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, subtotal, currentOrder, placeOrder, advanceOrderStatus }}
+      value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, subtotal, orders, currentOrder, placeOrder, advanceOrderStatus }}
     >
       {children}
     </CartContext.Provider>
