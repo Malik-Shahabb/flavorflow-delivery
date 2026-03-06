@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Star, Clock, Truck, MapPin } from "lucide-react";
+import { ArrowLeft, Star, Clock, Truck, MapPin, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import MenuItemCard from "@/components/MenuItemCard";
