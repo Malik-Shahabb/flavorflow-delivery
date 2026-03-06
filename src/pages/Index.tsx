@@ -9,6 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 
 const Index = () => {
   const { data: dbRestaurants } = useRestaurants();
+  const { user } = useAuth();
 
   const allRestaurants: Restaurant[] = [
     ...(dbRestaurants || []).map((r) => ({
