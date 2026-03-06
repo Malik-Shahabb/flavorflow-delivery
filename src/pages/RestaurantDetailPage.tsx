@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Star, Clock, Truck, MapPin } from "lucide-react";
+import { ArrowLeft, Star, Clock, Truck, MapPin, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import MenuItemCard from "@/components/MenuItemCard";
@@ -7,11 +7,14 @@ import { restaurants as staticRestaurants, Restaurant, MenuItem } from "@/data/r
 import { useCart } from "@/context/CartContext";
 import { useMemo } from "react";
 import { useRestaurant } from "@/hooks/useRestaurants";
+import { useAuth } from "@/context/AuthContext";
 
 const RestaurantDetailPage = () => {
   const { id } = useParams();
   const { items, subtotal } = useCart();
+  const { user } = useAuth();
   const { data: dbRestaurant, isLoading } = useRestaurant(id);
+  const isOwner = user && dbRestaurant && dbRestaurant.owner_id === user.id;
 
   // Try static data first, then DB
   const restaurant: Restaurant | null = useMemo(() => {
@@ -105,6 +108,13 @@ const RestaurantDetailPage = () => {
             <span className="flex items-center gap-1"><MapPin className="h-4 w-4" />{restaurant.address}</span>
           </div>
           <p className="mt-2 text-xs text-muted-foreground">Minimum order: ${restaurant.minOrder.toFixed(2)}</p>
+          {isOwner && (
+            <Link to={`/manage-restaurant/${restaurant.id}`}>
+              <Button variant="outline" size="sm" className="mt-3 gap-1.5">
+                <Settings className="h-4 w-4" /> Manage Menu
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
 
