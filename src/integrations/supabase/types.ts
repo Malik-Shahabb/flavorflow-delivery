@@ -61,6 +61,36 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          address: string
+          avatar_url: string
+          created_at: string
+          full_name: string
+          id: string
+          phone: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string
+          avatar_url?: string
+          created_at?: string
+          full_name?: string
+          id: string
+          phone?: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          avatar_url?: string
+          created_at?: string
+          full_name?: string
+          id?: string
+          phone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       restaurants: {
         Row: {
           address: string
