@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import RestaurantCard from "@/components/RestaurantCard";
 import { restaurants as staticRestaurants, Restaurant } from "@/data/restaurants";
 import { useRestaurants } from "@/hooks/useRestaurants";
+import { useAuth } from "@/context/AuthContext";
 
 const Index = () => {
   const { data: dbRestaurants } = useRestaurants();
+  const { user } = useAuth();
 
   const allRestaurants: Restaurant[] = [
     ...(dbRestaurants || []).map((r) => ({
@@ -64,11 +66,13 @@ const Index = () => {
                   Browse Restaurants <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-              <Link to="/login">
-                <Button size="lg" variant="ghost" className="rounded-full text-primary-foreground hover:bg-primary-foreground/10">
-                  Sign In
-                </Button>
-              </Link>
+              {!user && (
+                <Link to="/login">
+                  <Button size="lg" variant="ghost" className="rounded-full text-primary-foreground hover:bg-primary-foreground/10">
+                    Sign In
+                  </Button>
+                </Link>
+              )}
             </div>
           </motion.div>
         </div>
