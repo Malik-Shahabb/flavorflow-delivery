@@ -108,6 +108,13 @@ const RestaurantDetailPage = () => {
             <span className="flex items-center gap-1"><MapPin className="h-4 w-4" />{restaurant.address}</span>
           </div>
           <p className="mt-2 text-xs text-muted-foreground">Minimum order: ${restaurant.minOrder.toFixed(2)}</p>
+          {isOwner && (
+            <Link to={`/manage-restaurant/${restaurant.id}`}>
+              <Button variant="outline" size="sm" className="mt-3 gap-1.5">
+                <Settings className="h-4 w-4" /> Manage Menu
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
 
