@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import RestaurantCard from "@/components/RestaurantCard";
 import { restaurants as staticRestaurants, Restaurant } from "@/data/restaurants";
 import { useRestaurants } from "@/hooks/useRestaurants";
+import { useAuth } from "@/context/AuthContext";
 
 const Index = () => {
   const { data: dbRestaurants } = useRestaurants();
