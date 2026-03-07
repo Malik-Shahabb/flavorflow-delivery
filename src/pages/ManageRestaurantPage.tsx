@@ -125,8 +125,36 @@ const ManageRestaurantPage = () => {
           <Link to={`/restaurant/${id}`} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
             <ArrowLeft className="h-4 w-4" /> Back to Restaurant
           </Link>
-          <h1 className="font-serif text-3xl text-foreground">Manage: {restaurant.name}</h1>
-          <p className="mt-1 text-muted-foreground">Add or remove menu items</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="font-serif text-3xl text-foreground">Manage: {restaurant.name}</h1>
+              <p className="mt-1 text-muted-foreground">Add or remove menu items</p>
+            </div>
+            <Button
+              variant="destructive"
+              size="sm"
+              className="gap-1.5"
+              disabled={deletingRestaurant}
+              onClick={async () => {
+                if (!confirm("Are you sure you want to delete this restaurant and all its menu items? This cannot be undone.")) return;
+                setDeletingRestaurant(true);
+                try {
+                  const { error: mErr } = await supabase.from("menu_items").delete().eq("restaurant_id", restaurant.id);
+                  if (mErr) throw mErr;
+                  const { error: rErr } = await supabase.from("restaurants").delete().eq("id", restaurant.id);
+                  if (rErr) throw rErr;
+                  toast.success("Restaurant deleted");
+                  queryClient.invalidateQueries({ queryKey: ["restaurants"] });
+                  navigate("/restaurants");
+                } catch (err: any) {
+                  toast.error(err.message || "Failed to delete restaurant");
+                  setDeletingRestaurant(false);
+                }
+              }}
+            >
+              <Trash2 className="h-4 w-4" /> {deletingRestaurant ? "Deleting..." : "Delete Restaurant"}
+            </Button>
+          </div>
         </div>
       </div>
 
