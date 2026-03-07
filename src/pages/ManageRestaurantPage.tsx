@@ -40,6 +40,7 @@ const ManageRestaurantPage = () => {
 
   const [deleting, setDeleting] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
+  const [deletingRestaurant, setDeletingRestaurant] = useState(false);
   const [newItems, setNewItems] = useState<NewMenuItem[]>([{ ...emptyItem }]);
 
   if (!isReady || isLoading) {
