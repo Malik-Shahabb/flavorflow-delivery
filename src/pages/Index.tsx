@@ -6,6 +6,7 @@ import RestaurantCard from "@/components/RestaurantCard";
 import { restaurants as staticRestaurants, Restaurant } from "@/data/restaurants";
 import { useRestaurants } from "@/hooks/useRestaurants";
 import { useAuth } from "@/context/AuthContext";
+import heroImage from "@/assets/hero-food.jpg";
 
 const Index = () => {
   const { data: dbRestaurants } = useRestaurants();
