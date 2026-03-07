@@ -4,6 +4,7 @@ import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import NotificationBell from "@/components/NotificationBell";
 
 const Navbar = () => {
   const { totalItems } = useCart();
