@@ -61,6 +61,94 @@ export type Database = {
           },
         ]
       }
+      order_notifications: {
+        Row: {
+          created_at: string
+          customer_name: string
+          id: string
+          is_read: boolean
+          order_id: string
+          owner_id: string
+          restaurant_name: string
+          total: number
+        }
+        Insert: {
+          created_at?: string
+          customer_name?: string
+          id?: string
+          is_read?: boolean
+          order_id: string
+          owner_id: string
+          restaurant_name: string
+          total?: number
+        }
+        Update: {
+          created_at?: string
+          customer_name?: string
+          id?: string
+          is_read?: boolean
+          order_id?: string
+          owner_id?: string
+          restaurant_name?: string
+          total?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_notifications_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          delivery_fee: number
+          id: string
+          items: Json
+          restaurant_id: string
+          restaurant_name: string
+          status: string
+          subtotal: number
+          total: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          delivery_fee?: number
+          id?: string
+          items?: Json
+          restaurant_id: string
+          restaurant_name: string
+          status?: string
+          subtotal?: number
+          total?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          delivery_fee?: number
+          id?: string
+          items?: Json
+          restaurant_id?: string
+          restaurant_name?: string
+          status?: string
+          subtotal?: number
+          total?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           address: string

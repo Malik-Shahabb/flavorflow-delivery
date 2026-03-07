@@ -4,6 +4,7 @@ import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import NotificationBell from "@/components/NotificationBell";
 
 const Navbar = () => {
   const { totalItems } = useCart();
@@ -53,6 +54,7 @@ const Navbar = () => {
           </Link>
           {user ? (
             <div className="flex items-center gap-2">
+              <NotificationBell />
               <Link to="/profile">
                 <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
                   <User className="h-5 w-5" />
