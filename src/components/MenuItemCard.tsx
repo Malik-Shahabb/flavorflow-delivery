@@ -27,7 +27,7 @@ const MenuItemCard = ({ item, restaurantId, restaurantName }: MenuItemCardProps)
         </div>
         <h4 className="mt-1.5 font-serif text-base text-card-foreground">{item.name}</h4>
         <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{item.description}</p>
-        <p className="mt-2 font-semibold text-card-foreground">${item.price.toFixed(2)}</p>
+        <p className="mt-2 font-semibold text-card-foreground">₹{item.price.toFixed(2)}</p>
       </div>
       <div className="relative flex-shrink-0">
         <img

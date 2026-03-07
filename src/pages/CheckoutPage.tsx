@@ -112,14 +112,14 @@ const CheckoutPage = () => {
           {/* Summary */}
           <div className="rounded-lg border border-border bg-card p-6">
             <div className="space-y-2 text-sm">
-              <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
-              <div className="flex justify-between text-muted-foreground"><span>Delivery</span><span>${deliveryFee.toFixed(2)}</span></div>
-              <div className="border-t border-border pt-2 flex justify-between font-bold text-card-foreground text-base"><span>Total</span><span>${total.toFixed(2)}</span></div>
+              <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span>₹{subtotal.toFixed(2)}</span></div>
+              <div className="flex justify-between text-muted-foreground"><span>Delivery</span><span>₹{deliveryFee.toFixed(2)}</span></div>
+              <div className="border-t border-border pt-2 flex justify-between font-bold text-card-foreground text-base"><span>Total</span><span>₹{total.toFixed(2)}</span></div>
             </div>
           </div>
 
           <Button type="submit" className="w-full rounded-full" size="lg" disabled={isSubmitting}>
-            {isSubmitting ? "Processing..." : `Place Order — $${total.toFixed(2)}`}
+            {isSubmitting ? "Processing..." : `Place Order — ₹${total.toFixed(2)}`}
           </Button>
         </form>
       </div>

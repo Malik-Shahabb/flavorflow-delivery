@@ -171,7 +171,7 @@ const ManageRestaurantPage = () => {
                   <img src={item.image} alt={item.name} className="h-12 w-12 rounded-md object-cover" />
                   <div>
                     <p className="font-medium text-card-foreground">{item.name}</p>
-                    <p className="text-sm text-muted-foreground">{item.category} · ${item.price.toFixed(2)}</p>
+                    <p className="text-sm text-muted-foreground">{item.category} · ₹{item.price.toFixed(2)}</p>
                   </div>
                 </div>
                 <Button

@@ -104,10 +104,10 @@ const RestaurantDetailPage = () => {
               <strong className="text-card-foreground">{restaurant.rating}</strong> ({restaurant.reviewCount} reviews)
             </span>
             <span className="flex items-center gap-1"><Clock className="h-4 w-4" />{restaurant.deliveryTime}</span>
-            <span className="flex items-center gap-1"><Truck className="h-4 w-4" />${restaurant.deliveryFee.toFixed(2)} delivery</span>
+            <span className="flex items-center gap-1"><Truck className="h-4 w-4" />₹{restaurant.deliveryFee.toFixed(2)} delivery</span>
             <span className="flex items-center gap-1"><MapPin className="h-4 w-4" />{restaurant.address}</span>
           </div>
-          <p className="mt-2 text-xs text-muted-foreground">Minimum order: ${restaurant.minOrder.toFixed(2)}</p>
+          <p className="mt-2 text-xs text-muted-foreground">Minimum order: ₹{restaurant.minOrder.toFixed(2)}</p>
           {isOwner && (
             <Link to={`/manage-restaurant/${restaurant.id}`}>
               <Button variant="outline" size="sm" className="mt-3 gap-1.5">
@@ -144,7 +144,7 @@ const RestaurantDetailPage = () => {
           <div className="container flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">{items.reduce((s, i) => s + i.quantity, 0)} items</p>
-              <p className="text-lg font-bold text-card-foreground">${subtotal.toFixed(2)}</p>
+              <p className="text-lg font-bold text-card-foreground">₹{subtotal.toFixed(2)}</p>
             </div>
             <Link to="/cart">
               <Button size="lg" className="rounded-full bg-primary text-primary-foreground font-semibold">

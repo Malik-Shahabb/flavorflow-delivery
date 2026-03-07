@@ -40,7 +40,7 @@ const CartPage = () => {
               <img src={ci.menuItem.image} alt={ci.menuItem.name} className="h-16 w-16 rounded-lg object-cover" />
               <div className="flex-1 min-w-0">
                 <h4 className="font-medium text-card-foreground truncate">{ci.menuItem.name}</h4>
-                <p className="text-sm text-muted-foreground">${ci.menuItem.price.toFixed(2)}</p>
+                <p className="text-sm text-muted-foreground">₹{ci.menuItem.price.toFixed(2)}</p>
               </div>
               <div className="flex items-center gap-2">
                 <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => updateQuantity(ci.menuItem.id, ci.quantity - 1)}>
@@ -64,20 +64,20 @@ const CartPage = () => {
           <div className="mt-4 space-y-2 text-sm">
             <div className="flex justify-between text-muted-foreground">
               <span>Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>₹{subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-muted-foreground">
               <span>Delivery Fee</span>
-              <span>${deliveryFee.toFixed(2)}</span>
+              <span>₹{deliveryFee.toFixed(2)}</span>
             </div>
             <div className="border-t border-border pt-2 flex justify-between font-semibold text-card-foreground">
               <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <span>₹{total.toFixed(2)}</span>
             </div>
           </div>
           <Link to="/checkout">
             <Button className="mt-6 w-full rounded-full" size="lg">
-              Proceed to Checkout — ${total.toFixed(2)}
+              Proceed to Checkout — ₹{total.toFixed(2)}
             </Button>
           </Link>
           <Button variant="ghost" className="mt-2 w-full text-muted-foreground" onClick={clearCart}>

@@ -71,13 +71,13 @@ const OrdersPage = () => {
                         {ci.quantity}x {ci.menuItem.name}
                       </span>
                       <span className="text-muted-foreground">
-                        ${(ci.menuItem.price * ci.quantity).toFixed(2)}
+                        ₹{(ci.menuItem.price * ci.quantity).toFixed(2)}
                       </span>
                     </div>
                   ))}
                   <div className="border-t border-border pt-2 flex justify-between font-bold text-card-foreground">
                     <span>Total</span>
-                    <span>${order.total.toFixed(2)}</span>
+                    <span>₹{order.total.toFixed(2)}</span>
                   </div>
                 </div>
 

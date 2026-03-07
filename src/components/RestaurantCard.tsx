@@ -46,7 +46,7 @@ const RestaurantCard = ({ restaurant }: { restaurant: Restaurant }) => {
           </span>
           <span className="flex items-center gap-1">
             <Truck className="h-4 w-4" />
-            ${restaurant.deliveryFee.toFixed(2)}
+            ₹{restaurant.deliveryFee.toFixed(2)}
           </span>
         </div>
       </div>
