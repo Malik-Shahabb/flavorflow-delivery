@@ -40,7 +40,7 @@ const CartPage = () => {
               <img src={ci.menuItem.image} alt={ci.menuItem.name} className="h-16 w-16 rounded-lg object-cover" />
               <div className="flex-1 min-w-0">
                 <h4 className="font-medium text-card-foreground truncate">{ci.menuItem.name}</h4>
-                <p className="text-sm text-muted-foreground">${ci.menuItem.price.toFixed(2)}</p>
+                <p className="text-sm text-muted-foreground">₹{ci.menuItem.price.toFixed(2)}</p>
               </div>
               <div className="flex items-center gap-2">
                 <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => updateQuantity(ci.menuItem.id, ci.quantity - 1)}>
