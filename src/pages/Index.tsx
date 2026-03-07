@@ -137,8 +137,10 @@ const Index = () => {
       </section>
 
       {/* CTA */}
-      <section className="bg-hero-gradient py-16">
-        <div className="container text-center">
+      <section className="relative overflow-hidden py-16">
+        <img src={heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-foreground/65" />
+        <div className="container relative z-10 text-center">
           <h2 className="font-serif text-3xl text-primary-foreground">Own a Restaurant?</h2>
           <p className="mt-2 text-primary-foreground/80">Partner with FeastFleet and grow your business</p>
           <Link to="/register-restaurant">
