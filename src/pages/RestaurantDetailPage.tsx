@@ -104,7 +104,7 @@ const RestaurantDetailPage = () => {
               <strong className="text-card-foreground">{restaurant.rating}</strong> ({restaurant.reviewCount} reviews)
             </span>
             <span className="flex items-center gap-1"><Clock className="h-4 w-4" />{restaurant.deliveryTime}</span>
-            <span className="flex items-center gap-1"><Truck className="h-4 w-4" />${restaurant.deliveryFee.toFixed(2)} delivery</span>
+            <span className="flex items-center gap-1"><Truck className="h-4 w-4" />₹{restaurant.deliveryFee.toFixed(2)} delivery</span>
             <span className="flex items-center gap-1"><MapPin className="h-4 w-4" />{restaurant.address}</span>
           </div>
           <p className="mt-2 text-xs text-muted-foreground">Minimum order: ${restaurant.minOrder.toFixed(2)}</p>
