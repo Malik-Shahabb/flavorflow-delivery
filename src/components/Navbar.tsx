@@ -54,6 +54,7 @@ const Navbar = () => {
           </Link>
           {user ? (
             <div className="flex items-center gap-2">
+              <NotificationBell />
               <Link to="/profile">
                 <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
                   <User className="h-5 w-5" />
