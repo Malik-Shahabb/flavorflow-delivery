@@ -144,7 +144,7 @@ const RestaurantDetailPage = () => {
           <div className="container flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">{items.reduce((s, i) => s + i.quantity, 0)} items</p>
-              <p className="text-lg font-bold text-card-foreground">${subtotal.toFixed(2)}</p>
+              <p className="text-lg font-bold text-card-foreground">₹{subtotal.toFixed(2)}</p>
             </div>
             <Link to="/cart">
               <Button size="lg" className="rounded-full bg-primary text-primary-foreground font-semibold">

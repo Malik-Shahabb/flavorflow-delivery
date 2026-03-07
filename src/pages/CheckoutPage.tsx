@@ -119,7 +119,7 @@ const CheckoutPage = () => {
           </div>
 
           <Button type="submit" className="w-full rounded-full" size="lg" disabled={isSubmitting}>
-            {isSubmitting ? "Processing..." : `Place Order — $${total.toFixed(2)}`}
+            {isSubmitting ? "Processing..." : `Place Order — ₹${total.toFixed(2)}`}
           </Button>
         </form>
       </div>

@@ -77,7 +77,7 @@ const CartPage = () => {
           </div>
           <Link to="/checkout">
             <Button className="mt-6 w-full rounded-full" size="lg">
-              Proceed to Checkout — ${total.toFixed(2)}
+              Proceed to Checkout — ₹{total.toFixed(2)}
             </Button>
           </Link>
           <Button variant="ghost" className="mt-2 w-full text-muted-foreground" onClick={clearCart}>

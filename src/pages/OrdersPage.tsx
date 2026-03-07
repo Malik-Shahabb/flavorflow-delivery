@@ -77,7 +77,7 @@ const OrdersPage = () => {
                   ))}
                   <div className="border-t border-border pt-2 flex justify-between font-bold text-card-foreground">
                     <span>Total</span>
-                    <span>${order.total.toFixed(2)}</span>
+                    <span>₹{order.total.toFixed(2)}</span>
                   </div>
                 </div>
 
