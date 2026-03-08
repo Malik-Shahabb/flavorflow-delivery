@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { Minus, Plus, Trash2, ArrowLeft, ShoppingBag } from "lucide-react";
+import { Minus, Plus, Trash2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
+import EmptyState from "@/components/EmptyState";
 
 const CartPage = () => {
   const { items, updateQuantity, removeItem, subtotal, clearCart } = useCart();
