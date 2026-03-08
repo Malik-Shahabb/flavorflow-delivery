@@ -114,7 +114,7 @@ export const restaurants: Restaurant[] = [
     rating: 4.6,
     reviewCount: 189,
     deliveryTime: "20-30 min",
-    deliveryFee: 28,
+    deliveryFee: 60,
     minOrder: 250,
     image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600&h=400&fit=crop",
     address: "321 Cherry Blvd",
