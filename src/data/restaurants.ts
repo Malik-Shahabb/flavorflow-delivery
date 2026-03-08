@@ -121,11 +121,11 @@ export const restaurants: Restaurant[] = [
     isOpen: true,
     tags: ["Premium"],
     menu: [
-      { id: "4-1", name: "Salmon Nigiri Set", description: "Fresh salmon over seasoned rice, 6 pieces", price: 150, image: "https://images.unsplash.com/photo-1553621042-f6e147245754?w=300&h=200&fit=crop", category: "Sushi", isVeg: false, isPopular: true },
-      { id: "4-2", name: "Tonkotsu Ramen", description: "Rich pork bone broth with noodles and chashu", price: 140, image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&h=200&fit=crop", category: "Ramen", isVeg: false, isPopular: true },
-      { id: "4-3", name: "Edamame", description: "Steamed soybeans with sea salt", price: 100, image: "https://images.unsplash.com/photo-1564093497595-593b96d80180?w=300&h=200&fit=crop", category: "Starters", isVeg: true },
-      { id: "4-4", name: "California Roll", description: "Crab, avocado, and cucumber roll, 8 pieces", price: 130, image: "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=300&h=200&fit=crop", category: "Sushi", isVeg: false },
-      { id: "4-5", name: "Mochi Ice Cream", description: "Japanese rice cake filled with ice cream, 3 pieces", price: 110, image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=300&h=200&fit=crop", category: "Desserts", isVeg: true },
+      { id: "4-1", name: "Salmon Nigiri Set", description: "Fresh salmon over seasoned rice, 6 pieces", price: 550, image: "https://images.unsplash.com/photo-1553621042-f6e147245754?w=300&h=200&fit=crop", category: "Sushi", isVeg: false, isPopular: true },
+      { id: "4-2", name: "Tonkotsu Ramen", description: "Rich pork bone broth with noodles and chashu", price: 480, image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&h=200&fit=crop", category: "Ramen", isVeg: false, isPopular: true },
+      { id: "4-3", name: "Edamame", description: "Steamed soybeans with sea salt", price: 250, image: "https://images.unsplash.com/photo-1564093497595-593b96d80180?w=300&h=200&fit=crop", category: "Starters", isVeg: true },
+      { id: "4-4", name: "California Roll", description: "Crab, avocado, and cucumber roll, 8 pieces", price: 420, image: "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=300&h=200&fit=crop", category: "Sushi", isVeg: false },
+      { id: "4-5", name: "Mochi Ice Cream", description: "Japanese rice cake filled with ice cream, 3 pieces", price: 280, image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=300&h=200&fit=crop", category: "Desserts", isVeg: true },
     ],
   },
   {
