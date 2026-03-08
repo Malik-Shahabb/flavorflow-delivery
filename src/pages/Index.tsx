@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, MapPin, Clock, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,11 @@ import heroImage from "@/assets/hero-food.jpg";
 
 const Index = () => {
   const { data: dbRestaurants } = useRestaurants();
-  const { user } = useAuth();
+  const { user, activeRole } = useAuth();
+
+  // Redirect non-customer roles to their dashboards
+  if (user && activeRole === "owner") return <Navigate to="/owner-dashboard" replace />;
+  if (user && activeRole === "delivery") return <Navigate to="/delivery-dashboard" replace />;
 
   const allRestaurants: Restaurant[] = [
     ...(dbRestaurants || []).map((r) => ({

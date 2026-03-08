@@ -22,7 +22,7 @@ const LoginPage = () => {
   const [vehicleNumber, setVehicleNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { user, isReady } = useAuth();
+  const { user, isReady, setActiveRole } = useAuth();
 
   useEffect(() => {
     if (isReady && user) {
@@ -89,7 +89,7 @@ const LoginPage = () => {
             vehicle_number: vehicleNumber,
           });
         }
-
+        setActiveRole(selectedRole);
         toast.success("Account created! Please check your email and verify before signing in.", { duration: 6000 });
       } else {
         const { error } = await supabase.auth.signInWithPassword({
@@ -97,6 +97,8 @@ const LoginPage = () => {
           password,
         });
         if (error) throw error;
+        // Set the active role for this session
+        setActiveRole(selectedRole);
         toast.success("Logged in successfully!");
         if (selectedRole === "owner") navigate("/owner-dashboard");
         else if (selectedRole === "delivery") navigate("/delivery-dashboard");
