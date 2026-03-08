@@ -85,6 +85,15 @@ const DeliveryDashboardPage = () => {
   };
 
   const handleDeliver = async (orderId: string) => {
+    if (orderId.startsWith("demo-")) {
+      const demoOrder = pickedDemoOrders.find((o) => o.id === orderId);
+      if (demoOrder) {
+        setPickedDemoOrders((prev) => prev.filter((o) => o.id !== orderId));
+        setDeliveredDemoOrders((prev) => [{ ...demoOrder, status: "delivered" }, ...prev]);
+      }
+      toast.success("Order marked as delivered!");
+      return;
+    }
     const { error } = await supabase
       .from("orders")
       .update({ status: "delivered", status_updated_at: new Date().toISOString() })
