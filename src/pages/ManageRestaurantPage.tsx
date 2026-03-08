@@ -207,15 +207,18 @@ const ManageRestaurantPage = () => {
                     <p className="text-sm text-muted-foreground">{item.category} · ₹{item.price.toFixed(2)}</p>
                   </div>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-destructive hover:bg-destructive/10"
-                  disabled={deleting === item.id}
-                  onClick={() => handleDeleteItem(item.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                <div className="flex items-center gap-1">
+                  <EditMenuItemDialog item={item} restaurantId={restaurant.id} />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-destructive hover:bg-destructive/10"
+                    disabled={deleting === item.id}
+                    onClick={() => handleDeleteItem(item.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             ))
           )}
