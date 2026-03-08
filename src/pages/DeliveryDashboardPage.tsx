@@ -120,6 +120,9 @@ const DeliveryDashboardPage = () => {
       created_at: new Date(Date.now() - 10 * 60000).toISOString(),
       items: [{ name: "Paneer Tikka", quantity: 2 }, { name: "Garlic Naan", quantity: 3 }],
       delivery_agent_id: null,
+      customer_name: "Amit Verma",
+      customer_phone: "+91 98765 12340",
+      customer_address: "B-12, Lajpat Nagar, New Delhi",
     },
     {
       id: "demo-002",
@@ -129,6 +132,9 @@ const DeliveryDashboardPage = () => {
       created_at: new Date(Date.now() - 5 * 60000).toISOString(),
       items: [{ name: "Chicken Biryani", quantity: 2 }, { name: "Raita", quantity: 2 }],
       delivery_agent_id: null,
+      customer_name: "Priya Sharma",
+      customer_phone: "+91 87654 32109",
+      customer_address: "42, Connaught Place, Block A, New Delhi",
     },
     {
       id: "demo-003",
@@ -138,6 +144,9 @@ const DeliveryDashboardPage = () => {
       created_at: new Date(Date.now() - 15 * 60000).toISOString(),
       items: [{ name: "Masala Dosa", quantity: 1 }, { name: "Filter Coffee", quantity: 2 }],
       delivery_agent_id: null,
+      customer_name: "Rahul Singh",
+      customer_phone: "+91 99887 76655",
+      customer_address: "15, Saket, J Block, New Delhi",
     },
   ];
 
