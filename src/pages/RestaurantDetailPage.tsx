@@ -80,7 +80,7 @@ const RestaurantDetailPage = () => {
       {/* Banner */}
       <div className="relative h-56 md:h-72">
         <img src={restaurant.image} alt={restaurant.name} className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
         <Link to="/restaurants" className="absolute left-4 top-4">
           <Button size="icon" variant="secondary" className="rounded-full shadow-lg">
             <ArrowLeft className="h-5 w-5" />
