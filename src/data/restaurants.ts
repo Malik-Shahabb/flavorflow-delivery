@@ -100,11 +100,11 @@ export const restaurants: Restaurant[] = [
     isOpen: true,
     tags: ["New", "Popular"],
     menu: [
-      { id: "3-1", name: "Butter Chicken", description: "Tender chicken in rich, creamy tomato-based sauce", price: 150, image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=300&h=200&fit=crop", category: "Mains", isVeg: false, isPopular: true },
-      { id: "3-2", name: "Paneer Tikka", description: "Grilled cottage cheese marinated in spiced yogurt", price: 130, image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=300&h=200&fit=crop", category: "Starters", isVeg: true, isPopular: true },
-      { id: "3-3", name: "Chicken Biryani", description: "Fragrant basmati rice layered with spiced chicken", price: 150, image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300&h=200&fit=crop", category: "Mains", isVeg: false },
-      { id: "3-4", name: "Garlic Naan", description: "Soft flatbread with garlic and butter", price: 100, image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=300&h=200&fit=crop", category: "Breads", isVeg: true },
-      { id: "3-5", name: "Gulab Jamun", description: "Deep-fried milk dumplings soaked in sugar syrup", price: 100, image: "https://images.unsplash.com/photo-1666190064491-c78caf0cbb18?w=300&h=200&fit=crop", category: "Desserts", isVeg: true },
+      { id: "3-1", name: "Butter Chicken", description: "Tender chicken in rich, creamy tomato-based sauce", price: 480, image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=300&h=200&fit=crop", category: "Mains", isVeg: false, isPopular: true },
+      { id: "3-2", name: "Paneer Tikka", description: "Grilled cottage cheese marinated in spiced yogurt", price: 380, image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=300&h=200&fit=crop", category: "Starters", isVeg: true, isPopular: true },
+      { id: "3-3", name: "Chicken Biryani", description: "Fragrant basmati rice layered with spiced chicken", price: 450, image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300&h=200&fit=crop", category: "Mains", isVeg: false },
+      { id: "3-4", name: "Garlic Naan", description: "Soft flatbread with garlic and butter", price: 200, image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=300&h=200&fit=crop", category: "Breads", isVeg: true },
+      { id: "3-5", name: "Gulab Jamun", description: "Deep-fried milk dumplings soaked in sugar syrup", price: 220, image: "https://images.unsplash.com/photo-1666190064491-c78caf0cbb18?w=300&h=200&fit=crop", category: "Desserts", isVeg: true },
     ],
   },
   {
