@@ -135,7 +135,7 @@ export const restaurants: Restaurant[] = [
     rating: 4.3,
     reviewCount: 412,
     deliveryTime: "15-25 min",
-    deliveryFee: 22,
+    deliveryFee: 35,
     minOrder: 150,
     image: "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=600&h=400&fit=crop",
     address: "555 Grill Road",
