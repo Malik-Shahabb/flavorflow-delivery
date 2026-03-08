@@ -183,6 +183,50 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const currentOrder = orders.length > 0 ? orders[0] : null;
 
+  // Background: auto-advance local-only orders every 30s
+  useEffect(() => {
+    const localActive = orders.filter((o) => !o.dbOrderId && o.status !== "delivered");
+    if (localActive.length === 0) return;
+
+    const interval = setInterval(() => {
+      localActive.forEach((o) => {
+        if (o.status !== "delivered") {
+          advanceLocalOrder(o.id);
+        }
+      });
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [orders, advanceLocalOrder]);
+
+  // Background: poll advance-order-status edge function every 30s for DB orders
+  const dbPollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  useEffect(() => {
+    const hasActiveOrders = orders.some((o) => o.dbOrderId && o.status !== "delivered");
+    
+    if (dbPollRef.current) {
+      clearInterval(dbPollRef.current);
+      dbPollRef.current = null;
+    }
+
+    if (!hasActiveOrders) return;
+
+    dbPollRef.current = setInterval(async () => {
+      try {
+        await supabase.functions.invoke("advance-order-status");
+      } catch (e) {
+        // silently ignore
+      }
+    }, 30000);
+
+    return () => {
+      if (dbPollRef.current) {
+        clearInterval(dbPollRef.current);
+        dbPollRef.current = null;
+      }
+    };
+  }, [orders]);
+
   return (
     <CartContext.Provider
       value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, subtotal, orders, currentOrder, placeOrder, advanceOrderStatus, advanceLocalOrder }}
