@@ -145,7 +145,11 @@ const MenuItemCard = ({ item, restaurantId, restaurantName, isOpen = true, deliv
           loading="lazy"
         />
         <div className="absolute -bottom-3 left-1/2 -translate-x-1/2">
-          {cartItem ? (
+          {!isOpen ? (
+            <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground shadow-md">
+              CLOSED
+            </span>
+          ) : cartItem ? (
             <div className="flex items-center gap-1 rounded-full bg-primary px-1 shadow-md">
               <Button
                 size="icon"
@@ -162,7 +166,7 @@ const MenuItemCard = ({ item, restaurantId, restaurantName, isOpen = true, deliv
                 size="icon"
                 variant="ghost"
                 className="h-7 w-7 text-primary-foreground hover:bg-primary/80"
-                onClick={() => addItem(item, restaurantId, restaurantName)}
+                onClick={() => addItem(item, restaurantId, restaurantName, deliveryFee)}
               >
                 <Plus className="h-3.5 w-3.5" />
               </Button>
@@ -171,7 +175,7 @@ const MenuItemCard = ({ item, restaurantId, restaurantName, isOpen = true, deliv
             <Button
               size="sm"
               className="h-7 rounded-full bg-primary px-4 text-xs font-bold text-primary-foreground shadow-md hover:bg-primary/90"
-              onClick={() => addItem(item, restaurantId, restaurantName)}
+              onClick={() => addItem(item, restaurantId, restaurantName, deliveryFee)}
             >
               ADD
             </Button>
