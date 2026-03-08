@@ -184,17 +184,20 @@ const OrdersPage = () => {
                 )}
 
                 {order.status === "delivered" && (
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
                     <p className="text-sm font-semibold text-success">🎉 Delivered!</p>
-                    {order.dbOrderId ? (
-                      <ReviewDialog
-                        orderId={order.dbOrderId}
-                        restaurantId={order.items[0]?.restaurantId || ""}
-                        restaurantName={order.restaurantName}
-                      />
-                    ) : (
-                      <p className="text-xs text-muted-foreground">Review unavailable</p>
-                    )}
+                    <div className="flex gap-2">
+                      <DeliveryRatingDialog orderId={order.id} />
+                      {order.dbOrderId ? (
+                        <ReviewDialog
+                          orderId={order.dbOrderId}
+                          restaurantId={order.items[0]?.restaurantId || ""}
+                          restaurantName={order.restaurantName}
+                        />
+                      ) : (
+                        <p className="text-xs text-muted-foreground">Review unavailable</p>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
