@@ -239,9 +239,12 @@ const DeliveryDashboardPage = () => {
                       <p className="text-xs text-muted-foreground mt-1">
                         Order #{order.id.slice(0, 8)} • {new Date(order.created_at).toLocaleTimeString()}
                       </p>
-                      <div className="mt-2 flex items-center gap-4 text-sm text-muted-foreground">
-                        <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> Customer Address</span>
-                        <span className="flex items-center gap-1"><Phone className="h-3.5 w-3.5" /> Contact</span>
+                      {order.customer_name && (
+                        <p className="mt-2 text-sm font-medium text-foreground">👤 {order.customer_name}</p>
+                      )}
+                      <div className="mt-1 flex flex-col gap-1 text-sm text-muted-foreground">
+                        <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5 text-primary" /> {order.customer_address || "Address not available"}</span>
+                        <span className="flex items-center gap-1"><Phone className="h-3.5 w-3.5 text-primary" /> {order.customer_phone || "Phone not available"}</span>
                       </div>
                       {Array.isArray(order.items) && (
                         <p className="mt-2 text-xs text-muted-foreground">
