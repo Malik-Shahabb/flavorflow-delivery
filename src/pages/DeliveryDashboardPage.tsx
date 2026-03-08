@@ -150,9 +150,9 @@ const DeliveryDashboardPage = () => {
   const allDelivered = [...deliveredOrders, ...deliveredDemoOrders];
 
   const stats = {
-    delivered: deliveredOrders.length,
+    delivered: allDelivered.length,
     active: myActiveOrders.length,
-    earnings: deliveredOrders.reduce((sum, o) => sum + Number(o.total) * 0.1, 0).toFixed(0),
+    earnings: allDelivered.reduce((sum, o) => sum + Number(o.total) * 0.1, 0).toFixed(0),
   };
 
   if (loading) {
