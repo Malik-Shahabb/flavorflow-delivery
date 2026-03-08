@@ -249,8 +249,8 @@ const ManageRestaurantPage = () => {
                   <Input value={item.name} onChange={(e) => updateNewItem(idx, "name", e.target.value)} placeholder="Kung Pao Chicken" className="mt-1" />
                 </div>
                 <div>
-                  <Label>Price ($) *</Label>
-                  <Input type="number" step="0.01" value={item.price} onChange={(e) => updateNewItem(idx, "price", e.target.value)} placeholder="14.99" className="mt-1" />
+                  <Label>Price (₹) *</Label>
+                  <Input type="number" step="0.01" value={item.price} onChange={(e) => updateNewItem(idx, "price", e.target.value)} placeholder="199" className="mt-1" />
                 </div>
                 <div>
                   <Label>Category</Label>
