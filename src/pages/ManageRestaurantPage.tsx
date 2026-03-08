@@ -42,7 +42,27 @@ const ManageRestaurantPage = () => {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
   const [deletingRestaurant, setDeletingRestaurant] = useState(false);
+  const [togglingOpen, setTogglingOpen] = useState(false);
   const [newItems, setNewItems] = useState<NewMenuItem[]>([{ ...emptyItem }]);
+
+  const handleToggleOpen = async () => {
+    if (!restaurant) return;
+    setTogglingOpen(true);
+    try {
+      const { error } = await supabase
+        .from("restaurants")
+        .update({ is_open: !restaurant.is_open })
+        .eq("id", restaurant.id);
+      if (error) throw error;
+      toast.success(restaurant.is_open ? "Restaurant marked as Closed" : "Restaurant marked as Open");
+      queryClient.invalidateQueries({ queryKey: ["restaurant", id] });
+      queryClient.invalidateQueries({ queryKey: ["restaurants"] });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update status");
+    } finally {
+      setTogglingOpen(false);
+    }
+  };
 
   if (!isReady || isLoading) {
     return (
