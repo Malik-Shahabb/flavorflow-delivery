@@ -180,6 +180,16 @@ const LoginPage = () => {
           </button>
         </p>
 
+        {!isRegister && (
+          <button
+            type="button"
+            className="mt-2 w-full text-center text-sm font-medium text-primary hover:underline"
+            onClick={handleForgotPassword}
+          >
+            Forgot Password?
+          </button>
+        )}
+
         <button
           type="button"
           onClick={() => { setSelectedRole(null); setIsRegister(false); setEmail(""); setPassword(""); setFullName(""); setPhone(""); }}
