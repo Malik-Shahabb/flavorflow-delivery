@@ -72,7 +72,7 @@ export const restaurants: Restaurant[] = [
     rating: 4.5,
     reviewCount: 528,
     deliveryTime: "30-40 min",
-    deliveryFee: 20,
+    deliveryFee: 30,
     minOrder: 200,
     image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=400&fit=crop",
     address: "456 Oak Avenue",
