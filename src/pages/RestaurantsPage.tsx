@@ -20,10 +20,6 @@ const RestaurantsPage = () => {
   const [maxDeliveryFee, setMaxDeliveryFee] = useState(50);
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState<"default" | "rating" | "delivery" | "price">("default");
-  const [minRating, setMinRating] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(200);
-  const [showFilters, setShowFilters] = useState(false);
-  const [sortBy, setSortBy] = useState<"default" | "rating" | "delivery" | "price">("default");
   const { data: dbRestaurants } = useRestaurants();
 
   const allRestaurants: Restaurant[] = useMemo(() => {
