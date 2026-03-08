@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
-import { ShoppingCart, User, Search, LogOut, Store, Moon, Sun, Menu, X, Settings, Bell, Shield } from "lucide-react";
+import { ShoppingCart, User, Search, LogOut, Store, Moon, Sun, Menu, X, Settings, Bell, Shield, ClipboardList } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
@@ -50,6 +50,11 @@ const Navbar = () => {
           <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground" onClick={toggleTheme} title={theme === "light" ? "Dark mode" : "Light mode"}>
             {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
           </Button>
+          <Link to="/orders">
+            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground" title="My Orders">
+              <ClipboardList className="h-4 w-4" />
+            </Button>
+          </Link>
           <Link to="/cart" className="relative">
             <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground">
               <ShoppingCart className="h-4 w-4" />
@@ -78,6 +83,9 @@ const Navbar = () => {
                 <DropdownMenuItem onClick={() => navigate("/restaurants")} className="gap-2 cursor-pointer">
                   <Search className="h-4 w-4" /> Search Restaurants
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/orders")} className="gap-2 cursor-pointer">
+                  <ClipboardList className="h-4 w-4" /> My Orders
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => navigate("/owner-dashboard")} className="gap-2 cursor-pointer">
                   <Store className="h-4 w-4" /> Owner Dashboard
@@ -101,6 +109,11 @@ const Navbar = () => {
           <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground" onClick={toggleTheme}>
             {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
           </Button>
+          <Link to="/orders">
+            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground">
+              <ClipboardList className="h-4 w-4" />
+            </Button>
+          </Link>
           <Link to="/cart" className="relative">
             <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground">
               <ShoppingCart className="h-4 w-4" />

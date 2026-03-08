@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -75,6 +75,23 @@ const OrdersPage = () => {
       supabase.removeChannel(channel);
     };
   }, [user]);
+
+  // Poll the advance-order-status function every 30 seconds
+  useEffect(() => {
+    if (!user) return;
+    const hasActiveOrders = dbOrders.some((o) => o.status !== "delivered");
+    if (!hasActiveOrders && dbOrders.length > 0) return;
+
+    const interval = setInterval(async () => {
+      try {
+        await supabase.functions.invoke("advance-order-status");
+      } catch (e) {
+        // silently ignore
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [user, dbOrders]);
 
   // Also include local-only orders from cart context
   const { orders: localOrders } = useCart();
@@ -173,7 +190,7 @@ const OrdersPage = () => {
                 {/* Auto-advancing notice for non-delivered */}
                 {order.status !== "delivered" && (
                   <p className="text-xs text-muted-foreground text-center">
-                    Status updates automatically every 5 minutes
+                    Status updates automatically every 30 seconds
                   </p>
                 )}
 
