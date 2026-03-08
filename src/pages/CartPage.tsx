@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { Minus, Plus, Trash2, ArrowLeft, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { restaurants } from "@/data/restaurants";
 
 const CartPage = () => {
   const { items, updateQuantity, removeItem, subtotal, clearCart } = useCart();
@@ -20,8 +19,7 @@ const CartPage = () => {
     );
   }
 
-  const restaurant = restaurants.find((r) => r.id === items[0].restaurantId);
-  const deliveryFee = restaurant?.deliveryFee || 2.99;
+  const deliveryFee = items[0]?.deliveryFee ?? 2.99;
   const total = subtotal + deliveryFee;
 
   return (
