@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import RestaurantCard from "@/components/RestaurantCard";
+import EmptyState from "@/components/EmptyState";
 import { restaurants as staticRestaurants, Restaurant } from "@/data/restaurants";
 import { useRestaurants } from "@/hooks/useRestaurants";
 
