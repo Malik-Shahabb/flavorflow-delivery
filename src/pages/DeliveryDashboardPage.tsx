@@ -60,7 +60,11 @@ const DeliveryDashboardPage = () => {
   const handlePickup = async (orderId: string) => {
     if (!user) return;
     if (orderId.startsWith("demo-")) {
-      toast.success("Demo order picked up! In a real scenario, this would assign you.");
+      const demoOrder = demoOrders.find((o) => o.id === orderId);
+      if (demoOrder) {
+        setPickedDemoOrders((prev) => [...prev, { ...demoOrder, status: "out-for-delivery", delivery_agent_id: user.id }]);
+      }
+      toast.success("Order picked up! Navigate to customer.");
       return;
     }
     const { error } = await supabase
