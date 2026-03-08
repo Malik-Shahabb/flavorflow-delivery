@@ -14,6 +14,7 @@ interface CartContextType {
   currentOrder: Order | null;
   placeOrder: (deliveryFee: number) => void;
   advanceOrderStatus: () => void;
+  advanceLocalOrder: (orderId: string) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
