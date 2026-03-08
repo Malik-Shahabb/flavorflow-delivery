@@ -47,7 +47,7 @@ const CheckoutPage = () => {
               </div>
               <div>
                 <Label>Address</Label>
-                <Input required placeholder="123 Main Street, Apt 4" className="mt-1" />
+                <Input required placeholder="42, Connaught Place, Block A" className="mt-1" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
