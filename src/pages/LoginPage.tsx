@@ -22,7 +22,7 @@ const LoginPage = () => {
   const [vehicleNumber, setVehicleNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { user, isReady } = useAuth();
+  const { user, isReady, setActiveRole } = useAuth();
 
   useEffect(() => {
     if (isReady && user) {
