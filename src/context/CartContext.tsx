@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface CartContextType {
   items: CartItem[];
-  addItem: (item: MenuItem, restaurantId: string, restaurantName: string) => void;
+  addItem: (item: MenuItem, restaurantId: string, restaurantName: string, deliveryFee?: number) => void;
   removeItem: (itemId: string) => void;
   updateQuantity: (itemId: string, quantity: number) => void;
   clearCart: () => void;
