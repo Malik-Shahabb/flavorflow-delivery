@@ -190,7 +190,7 @@ const OrdersPage = () => {
                 {/* Auto-advancing notice for non-delivered */}
                 {order.status !== "delivered" && (
                   <p className="text-xs text-muted-foreground text-center">
-                    Status updates automatically every 5 minutes
+                    Status updates automatically every 30 seconds
                   </p>
                 )}
 
