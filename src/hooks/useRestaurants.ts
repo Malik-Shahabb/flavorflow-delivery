@@ -57,10 +57,13 @@ export function useRestaurants() {
 }
 
 export function useRestaurant(id: string | undefined) {
+  // Only query DB if id looks like a UUID
+  const isUuid = id ? /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id) : false;
+
   return useQuery({
     queryKey: ["restaurant", id],
     queryFn: async (): Promise<DbRestaurant | null> => {
-      if (!id) return null;
+      if (!id || !isUuid) return null;
 
       const { data: restaurant, error } = await supabase
         .from("restaurants")
