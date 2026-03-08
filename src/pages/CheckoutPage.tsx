@@ -74,7 +74,7 @@ const CheckoutPage = () => {
               </div>
               <div>
                 <Label>Email</Label>
-                <Input required type="email" placeholder="john@example.com" className="mt-1" />
+                <Input required type="email" placeholder="rahul@example.com" className="mt-1" />
               </div>
             </div>
           </div>
