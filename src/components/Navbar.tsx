@@ -47,8 +47,8 @@ const Navbar = () => {
 
         {/* Desktop actions — minimal visible icons */}
         <div className="hidden items-center gap-1 md:flex">
-          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground" onClick={toggleTheme} title={theme === "light" ? "Dark mode" : theme === "dark" ? "Night light" : "Light mode"}>
-            {theme === "light" ? <Moon className="h-4 w-4" /> : theme === "dark" ? <Sunset className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground" onClick={toggleTheme} title={theme === "light" ? "Switch to Dark mode" : theme === "dark" ? "Switch to Night Light" : "Switch to Light mode"}>
+            {theme === "light" ? <Moon className="h-4 w-4" /> : theme === "dark" ? <Sunset className="h-4 w-4 text-amber-400" /> : <Sun className="h-4 w-4 text-yellow-400" />}
           </Button>
           <Link to="/orders">
             <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground" title="My Orders">
