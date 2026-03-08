@@ -163,10 +163,10 @@ export const restaurants: Restaurant[] = [
     isOpen: false,
     tags: ["Healthy"],
     menu: [
-      { id: "6-1", name: "Falafel Bowl", description: "Crispy falafel with hummus, tabbouleh, and tahini", price: 130, image: "https://images.unsplash.com/photo-1593001874117-c99c800e3eb7?w=300&h=200&fit=crop", category: "Bowls", isVeg: true, isPopular: true },
-      { id: "6-2", name: "Chicken Shawarma Wrap", description: "Spiced chicken with garlic sauce in warm pita", price: 120, image: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300&h=200&fit=crop", category: "Wraps", isVeg: false },
-      { id: "6-3", name: "Greek Salad", description: "Fresh vegetables with feta cheese and olives", price: 110, image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300&h=200&fit=crop", category: "Salads", isVeg: true },
-      { id: "6-4", name: "Baklava", description: "Flaky pastry with nuts and honey syrup", price: 100, image: "https://images.unsplash.com/photo-1519676867240-f03562e64548?w=300&h=200&fit=crop", category: "Desserts", isVeg: true },
+      { id: "6-1", name: "Falafel Bowl", description: "Crispy falafel with hummus, tabbouleh, and tahini", price: 360, image: "https://images.unsplash.com/photo-1593001874117-c99c800e3eb7?w=300&h=200&fit=crop", category: "Bowls", isVeg: true, isPopular: true },
+      { id: "6-2", name: "Chicken Shawarma Wrap", description: "Spiced chicken with garlic sauce in warm pita", price: 340, image: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300&h=200&fit=crop", category: "Wraps", isVeg: false },
+      { id: "6-3", name: "Greek Salad", description: "Fresh vegetables with feta cheese and olives", price: 290, image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300&h=200&fit=crop", category: "Salads", isVeg: true },
+      { id: "6-4", name: "Baklava", description: "Flaky pastry with nuts and honey syrup", price: 240, image: "https://images.unsplash.com/photo-1519676867240-f03562e64548?w=300&h=200&fit=crop", category: "Desserts", isVeg: true },
     ],
   },
 ];
