@@ -39,13 +39,13 @@ const OrdersPage = () => {
             const isLatest = orderIdx === 0;
 
             return (
-              <div key={order.id} className="rounded-xl border border-border bg-card p-6 space-y-4">
-                <div className="flex items-center justify-between">
+              <div key={order.id} className="rounded-xl border border-border bg-card p-4 space-y-4 sm:p-6">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <h3 className="font-serif text-lg text-card-foreground">Order #{order.id}</h3>
+                    <h3 className="font-serif text-base text-card-foreground sm:text-lg">Order #{order.id}</h3>
                     <p className="text-sm text-muted-foreground">{order.restaurantName}</p>
                   </div>
-                  <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
+                  <span className={`self-start text-xs font-semibold px-3 py-1 rounded-full ${
                     order.status === "delivered"
                       ? "bg-success/10 text-success"
                       : "bg-primary/10 text-primary"

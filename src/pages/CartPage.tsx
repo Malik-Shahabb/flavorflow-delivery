@@ -36,13 +36,13 @@ const CartPage = () => {
 
         <div className="mt-6 space-y-4">
           {items.map((ci) => (
-            <div key={ci.menuItem.id} className="flex items-center gap-4 rounded-lg border border-border bg-card p-4">
-              <img src={ci.menuItem.image} alt={ci.menuItem.name} className="h-16 w-16 rounded-lg object-cover" />
+            <div key={ci.menuItem.id} className="flex flex-col gap-3 rounded-lg border border-border bg-card p-4 sm:flex-row sm:items-center sm:gap-4">
+              <img src={ci.menuItem.image} alt={ci.menuItem.name} className="h-20 w-full rounded-lg object-cover sm:h-16 sm:w-16" />
               <div className="flex-1 min-w-0">
                 <h4 className="font-medium text-card-foreground truncate">{ci.menuItem.name}</h4>
                 <p className="text-sm text-muted-foreground">₹{ci.menuItem.price.toFixed(2)}</p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 self-end sm:self-center">
                 <Button size="icon" variant="outline" className="h-8 w-8" onClick={() => updateQuantity(ci.menuItem.id, ci.quantity - 1)}>
                   <Minus className="h-3.5 w-3.5" />
                 </Button>

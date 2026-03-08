@@ -180,12 +180,12 @@ const AdminDashboardPage = () => {
           )}
 
           {activeTab === "users" && (
-            <div className="rounded-xl border border-border bg-card overflow-hidden">
-              <table className="w-full text-sm">
+            <div className="rounded-xl border border-border bg-card overflow-x-auto">
+              <table className="w-full min-w-[400px] text-sm">
                 <thead className="bg-muted/50">
                   <tr>
                     <th className="px-4 py-3 text-left font-medium text-muted-foreground">Name</th>
-                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">Phone</th>
+                    <th className="px-4 py-3 text-left font-medium text-muted-foreground hidden sm:table-cell">Phone</th>
                     <th className="px-4 py-3 text-left font-medium text-muted-foreground">Joined</th>
                   </tr>
                 </thead>
@@ -193,7 +193,7 @@ const AdminDashboardPage = () => {
                   {users.map((u) => (
                     <tr key={u.id}>
                       <td className="px-4 py-3 text-card-foreground">{u.full_name || "—"}</td>
-                      <td className="px-4 py-3 text-muted-foreground">{u.phone || "—"}</td>
+                      <td className="px-4 py-3 text-muted-foreground hidden sm:table-cell">{u.phone || "—"}</td>
                       <td className="px-4 py-3 text-muted-foreground">{new Date(u.created_at).toLocaleDateString()}</td>
                     </tr>
                   ))}
@@ -203,25 +203,25 @@ const AdminDashboardPage = () => {
           )}
 
           {activeTab === "restaurants" && (
-            <div className="rounded-xl border border-border bg-card overflow-hidden">
-              <table className="w-full text-sm">
+            <div className="rounded-xl border border-border bg-card overflow-x-auto">
+              <table className="w-full min-w-[450px] text-sm">
                 <thead className="bg-muted/50">
                   <tr>
                     <th className="px-4 py-3 text-left font-medium text-muted-foreground">Name</th>
-                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">Cuisine</th>
+                    <th className="px-4 py-3 text-left font-medium text-muted-foreground hidden sm:table-cell">Cuisine</th>
                     <th className="px-4 py-3 text-left font-medium text-muted-foreground">Status</th>
-                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">Registered</th>
+                    <th className="px-4 py-3 text-left font-medium text-muted-foreground hidden sm:table-cell">Registered</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                   {restaurants.map((r) => (
                     <tr key={r.id}>
                       <td className="px-4 py-3 text-card-foreground">{r.name}</td>
-                      <td className="px-4 py-3 text-muted-foreground">{r.cuisine}</td>
+                      <td className="px-4 py-3 text-muted-foreground hidden sm:table-cell">{r.cuisine}</td>
                       <td className="px-4 py-3">
                         <Badge variant={r.is_open ? "default" : "secondary"}>{r.is_open ? "Open" : "Closed"}</Badge>
                       </td>
-                      <td className="px-4 py-3 text-muted-foreground">{new Date(r.created_at).toLocaleDateString()}</td>
+                      <td className="px-4 py-3 text-muted-foreground hidden sm:table-cell">{new Date(r.created_at).toLocaleDateString()}</td>
                     </tr>
                   ))}
                 </tbody>
