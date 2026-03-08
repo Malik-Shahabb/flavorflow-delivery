@@ -40,6 +40,15 @@ const Navbar = () => {
         </nav>
 
         <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground"
+            onClick={toggleTheme}
+            title={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+          >
+            {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+          </Button>
           <Link to="/restaurants">
             <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground">
               <Search className="h-4 w-4" />

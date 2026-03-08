@@ -26,36 +26,38 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AuthProvider>
-        <CartProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/restaurants" element={<RestaurantsPage />} />
-              <Route path="/restaurant/:id" element={<RestaurantDetailPage />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/orders" element={<OrdersPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register-restaurant" element={<RegisterRestaurantPage />} />
-              <Route path="/manage-restaurant/:id" element={<ManageRestaurantPage />} />
-              <Route path="/owner-dashboard" element={<OwnerDashboardPage />} />
-              <Route path="/owner-orders/:id" element={<OwnerOrdersPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/admin" element={<AdminDashboardPage />} />
-              <Route path="/analytics/:id" element={<RestaurantAnalyticsPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </CartProvider>
-      </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <AuthProvider>
+          <CartProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/restaurants" element={<RestaurantsPage />} />
+                <Route path="/restaurant/:id" element={<RestaurantDetailPage />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/orders" element={<OrdersPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register-restaurant" element={<RegisterRestaurantPage />} />
+                <Route path="/manage-restaurant/:id" element={<ManageRestaurantPage />} />
+                <Route path="/owner-dashboard" element={<OwnerDashboardPage />} />
+                <Route path="/owner-orders/:id" element={<OwnerOrdersPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/admin" element={<AdminDashboardPage />} />
+                <Route path="/analytics/:id" element={<RestaurantAnalyticsPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </CartProvider>
+        </AuthProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ThemeProvider>
 );
 
 export default App;
