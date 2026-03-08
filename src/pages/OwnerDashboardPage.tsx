@@ -39,13 +39,13 @@ const OwnerDashboardPage = () => {
           <Link to="/" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
             <ArrowLeft className="h-4 w-4" /> Back
           </Link>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="font-serif text-3xl text-foreground">Owner Dashboard</h1>
-              <p className="mt-1 text-muted-foreground">Manage your restaurants, menu items, and orders</p>
+              <h1 className="font-serif text-2xl text-foreground sm:text-3xl">Owner Dashboard</h1>
+              <p className="mt-1 text-sm text-muted-foreground">Manage your restaurants, menu items, and orders</p>
             </div>
             <Link to="/register-restaurant">
-              <Button className="gap-1.5 rounded-full">
+              <Button className="gap-1.5 rounded-full w-full sm:w-auto">
                 <Plus className="h-4 w-4" /> Add Restaurant
               </Button>
             </Link>
