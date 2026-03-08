@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -25,6 +25,7 @@ interface DbOrder {
 
 const OrdersPage = () => {
   const { user } = useAuth();
+  const { orders: localOrders } = useCart();
   const [dbOrders, setDbOrders] = useState<DbOrder[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -76,9 +77,7 @@ const OrdersPage = () => {
     };
   }, [user]);
 
-  // Order advancement now runs globally in CartContext — no need to poll here
-
-
+  // Order advancement now runs globally in CartContext
 
   // Merge: show DB orders + local orders that don't have a dbOrderId (static restaurant orders)
   const allOrders = [
