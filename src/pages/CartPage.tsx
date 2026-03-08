@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Minus, Plus, Trash2, ArrowLeft, ShoppingBag, AlertTriangle } from "lucide-react";
+import { Minus, Plus, Trash2, ArrowLeft, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 
@@ -20,9 +20,7 @@ const CartPage = () => {
   }
 
   const deliveryFee = items[0]?.deliveryFee ?? 2.99;
-  const minOrder = items[0]?.minOrder ?? 0;
   const total = subtotal + deliveryFee;
-  const belowMinimum = minOrder > 0 && subtotal < minOrder;
 
   return (
     <div className="min-h-screen pb-16">
@@ -58,14 +56,6 @@ const CartPage = () => {
           ))}
         </div>
 
-        {/* Minimum order warning */}
-        {belowMinimum && (
-          <div className="mt-4 flex items-center gap-2 rounded-lg border border-destructive bg-destructive/10 p-4 text-sm text-destructive">
-            <AlertTriangle className="h-4 w-4 flex-shrink-0" />
-            <span>Minimum order is ₹{minOrder.toFixed(2)}. Add ₹{(minOrder - subtotal).toFixed(2)} more to proceed.</span>
-          </div>
-        )}
-
         {/* Summary */}
         <div className="mt-8 rounded-lg border border-border bg-card p-6">
           <h3 className="font-serif text-lg text-card-foreground">Order Summary</h3>
@@ -83,9 +73,9 @@ const CartPage = () => {
               <span>₹{total.toFixed(2)}</span>
             </div>
           </div>
-          <Link to={belowMinimum ? "#" : "/checkout"}>
-            <Button className="mt-6 w-full rounded-full" size="lg" disabled={belowMinimum}>
-              {belowMinimum ? `Add ₹${(minOrder - subtotal).toFixed(2)} more` : `Proceed to Checkout — ₹${total.toFixed(2)}`}
+          <Link to="/checkout">
+            <Button className="mt-6 w-full rounded-full" size="lg">
+              Proceed to Checkout — ₹{total.toFixed(2)}
             </Button>
           </Link>
           <Button variant="ghost" className="mt-2 w-full text-muted-foreground" onClick={clearCart}>

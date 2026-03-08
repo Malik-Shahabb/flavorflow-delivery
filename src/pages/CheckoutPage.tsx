@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, MapPin, Phone, Wallet } from "lucide-react";
+import { ArrowLeft, CreditCard, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,17 +12,7 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Form state
-  const [fullName, setFullName] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [zip, setZip] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<"cod" | "upi">("cod");
-
   const deliveryFee = items[0]?.deliveryFee ?? 2.99;
-  const minOrder = items[0]?.minOrder ?? 0;
   const total = subtotal + deliveryFee;
 
   if (items.length === 0) {
@@ -32,39 +22,6 @@ const CheckoutPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validate fields
-    if (fullName.trim().length < 2) {
-      toast.error("Please enter a valid name (at least 2 characters)");
-      return;
-    }
-    if (address.trim().length < 5) {
-      toast.error("Please enter a valid address (at least 5 characters)");
-      return;
-    }
-    if (city.trim().length < 2) {
-      toast.error("Please enter a valid city");
-      return;
-    }
-    if (!/^\d{5,6}$/.test(zip.trim())) {
-      toast.error("Please enter a valid ZIP/PIN code (5-6 digits)");
-      return;
-    }
-    if (!/^\+?[\d\s()-]{7,15}$/.test(phone.trim())) {
-      toast.error("Please enter a valid phone number");
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      toast.error("Please enter a valid email address");
-      return;
-    }
-
-    // Enforce minimum order
-    if (minOrder > 0 && subtotal < minOrder) {
-      toast.error(`Minimum order amount is ₹${minOrder.toFixed(2)}. Please add more items.`);
-      return;
-    }
-
     setIsSubmitting(true);
     setTimeout(() => {
       placeOrder(deliveryFee);
@@ -82,12 +39,6 @@ const CheckoutPage = () => {
 
         <h1 className="font-serif text-3xl text-foreground">Checkout</h1>
 
-        {minOrder > 0 && subtotal < minOrder && (
-          <div className="mt-4 rounded-lg border border-destructive bg-destructive/10 p-4 text-sm text-destructive">
-            Minimum order is ₹{minOrder.toFixed(2)}. You need ₹{(minOrder - subtotal).toFixed(2)} more.
-          </div>
-        )}
-
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           {/* Delivery */}
           <div className="rounded-lg border border-border bg-card p-6">
@@ -97,20 +48,20 @@ const CheckoutPage = () => {
             <div className="mt-4 grid gap-4">
               <div>
                 <Label>Full Name</Label>
-                <Input required placeholder="John Doe" className="mt-1" value={fullName} onChange={(e) => setFullName(e.target.value)} maxLength={100} />
+                <Input required placeholder="John Doe" className="mt-1" />
               </div>
               <div>
                 <Label>Address</Label>
-                <Input required placeholder="123 Main Street, Apt 4" className="mt-1" value={address} onChange={(e) => setAddress(e.target.value)} maxLength={200} />
+                <Input required placeholder="123 Main Street, Apt 4" className="mt-1" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>City</Label>
-                  <Input required placeholder="New York" className="mt-1" value={city} onChange={(e) => setCity(e.target.value)} maxLength={50} />
+                  <Input required placeholder="New York" className="mt-1" />
                 </div>
                 <div>
-                  <Label>ZIP / PIN Code</Label>
-                  <Input required placeholder="10001" className="mt-1" value={zip} onChange={(e) => setZip(e.target.value)} maxLength={6} />
+                  <Label>ZIP Code</Label>
+                  <Input required placeholder="10001" className="mt-1" />
                 </div>
               </div>
             </div>
@@ -124,45 +75,35 @@ const CheckoutPage = () => {
             <div className="mt-4 grid gap-4">
               <div>
                 <Label>Phone</Label>
-                <Input required type="tel" placeholder="+91 98765 43210" className="mt-1" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={15} />
+                <Input required type="tel" placeholder="+1 (555) 000-0000" className="mt-1" />
               </div>
               <div>
                 <Label>Email</Label>
-                <Input required type="email" placeholder="john@example.com" className="mt-1" value={email} onChange={(e) => setEmail(e.target.value)} maxLength={255} />
+                <Input required type="email" placeholder="john@example.com" className="mt-1" />
               </div>
             </div>
           </div>
 
-          {/* Payment Method */}
+          {/* Payment */}
           <div className="rounded-lg border border-border bg-card p-6">
             <h3 className="flex items-center gap-2 font-serif text-lg text-card-foreground">
-              <Wallet className="h-5 w-5 text-primary" /> Payment Method
+              <CreditCard className="h-5 w-5 text-primary" /> Payment
             </h3>
-            <div className="mt-4 flex gap-3">
-              <button
-                type="button"
-                onClick={() => setPaymentMethod("cod")}
-                className={`flex-1 rounded-lg border-2 p-4 text-center transition-colors ${
-                  paymentMethod === "cod"
-                    ? "border-primary bg-primary/5 text-card-foreground"
-                    : "border-border text-muted-foreground hover:border-primary/50"
-                }`}
-              >
-                <p className="font-semibold">Cash on Delivery</p>
-                <p className="text-xs mt-1">Pay when your order arrives</p>
-              </button>
-              <button
-                type="button"
-                onClick={() => setPaymentMethod("upi")}
-                className={`flex-1 rounded-lg border-2 p-4 text-center transition-colors ${
-                  paymentMethod === "upi"
-                    ? "border-primary bg-primary/5 text-card-foreground"
-                    : "border-border text-muted-foreground hover:border-primary/50"
-                }`}
-              >
-                <p className="font-semibold">UPI / Online</p>
-                <p className="text-xs mt-1">Simulated payment</p>
-              </button>
+            <div className="mt-4 grid gap-4">
+              <div>
+                <Label>Card Number</Label>
+                <Input required placeholder="4242 4242 4242 4242" className="mt-1" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label>Expiry</Label>
+                  <Input required placeholder="MM/YY" className="mt-1" />
+                </div>
+                <div>
+                  <Label>CVV</Label>
+                  <Input required placeholder="123" className="mt-1" />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -175,12 +116,7 @@ const CheckoutPage = () => {
             </div>
           </div>
 
-          <Button
-            type="submit"
-            className="w-full rounded-full"
-            size="lg"
-            disabled={isSubmitting || (minOrder > 0 && subtotal < minOrder)}
-          >
+          <Button type="submit" className="w-full rounded-full" size="lg" disabled={isSubmitting}>
             {isSubmitting ? "Processing..." : `Place Order — ₹${total.toFixed(2)}`}
           </Button>
         </form>

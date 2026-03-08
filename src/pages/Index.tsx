@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, MapPin, Clock, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import RestaurantCard from "@/components/RestaurantCard";
-import { Restaurant } from "@/data/restaurants";
+import { restaurants as staticRestaurants, Restaurant } from "@/data/restaurants";
 import { useRestaurants } from "@/hooks/useRestaurants";
 import { useAuth } from "@/context/AuthContext";
 import heroImage from "@/assets/hero-food.jpg";
@@ -12,10 +12,8 @@ const Index = () => {
   const { data: dbRestaurants } = useRestaurants();
   const { user } = useAuth();
 
-  // Only show approved DB restaurants (no static restaurants)
-  const allRestaurants: Restaurant[] = (dbRestaurants || [])
-    .filter((r) => r.is_approved)
-    .map((r) => ({
+  const allRestaurants: Restaurant[] = [
+    ...(dbRestaurants || []).map((r) => ({
       id: r.id,
       name: r.name,
       cuisine: r.cuisine,
@@ -38,7 +36,9 @@ const Index = () => {
         isVeg: m.is_veg,
         isPopular: m.is_popular,
       })),
-    }));
+    })),
+    ...staticRestaurants,
+  ];
 
   const featured = allRestaurants.filter((r) => r.isOpen).slice(0, 4);
 
@@ -60,18 +60,18 @@ const Index = () => {
               <br />
               Delivered Fast
             </h1>
-            <p className="mt-4 text-lg text-primary-foreground/80 md:text-xl">
-              Order from the best local restaurants with easy, contactless delivery.
+            <p className="mt-4 text-lg text-primary-foreground/80">
+              Order from the best local restaurants with easy, on-demand delivery.
             </p>
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/restaurants">
-                <Button size="lg" className="rounded-full gap-2 text-base">
-                  Order Now <ArrowRight className="h-5 w-5" />
+                <Button size="lg" variant="secondary" className="gap-2 rounded-full font-semibold shadow-lg">
+                  Browse Restaurants <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
               {!user && (
                 <Link to="/login">
-                  <Button size="lg" variant="outline" className="rounded-full text-base bg-white/10 text-white border-white/30 hover:bg-white/20 hover:text-white">
+                  <Button size="lg" variant="ghost" className="rounded-full text-primary-foreground hover:bg-primary-foreground/10">
                     Sign In
                   </Button>
                 </Link>
@@ -82,52 +82,90 @@ const Index = () => {
       </section>
 
       {/* Features */}
-      <section className="bg-card py-16 border-b border-border">
+      <section className="border-b border-border bg-card py-12">
+        <div className="container grid grid-cols-1 gap-8 md:grid-cols-3">
+          {[
+            { icon: MapPin, title: "Wide Coverage", desc: "Restaurants from every corner of your city" },
+            { icon: Clock, title: "Fast Delivery", desc: "Average delivery time under 30 minutes" },
+            { icon: ShieldCheck, title: "Secure Payments", desc: "Your transactions are always protected" },
+          ].map(({ icon: Icon, title, desc }) => (
+            <motion.div
+              key={title}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="flex items-start gap-4"
+            >
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <Icon className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="font-serif text-lg text-foreground">{title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Featured Restaurants */}
+      <section className="py-16">
         <div className="container">
-          <div className="grid gap-8 md:grid-cols-3">
-            {[
-              { icon: MapPin, title: "Live Tracking", desc: "Track your order in real-time from restaurant to your doorstep" },
-              { icon: Clock, title: "Fast Delivery", desc: "Average delivery in 30-40 minutes from confirmed restaurants" },
-              { icon: ShieldCheck, title: "Safe & Secure", desc: "Contactless delivery with verified restaurant partners" },
-            ].map(({ icon: Icon, title, desc }) => (
+          <div className="flex items-end justify-between">
+            <div>
+              <h2 className="font-serif text-3xl text-foreground">Popular Near You</h2>
+              <p className="mt-1 text-muted-foreground">Handpicked favorites from your area</p>
+            </div>
+            <Link to="/restaurants" className="text-sm font-medium text-primary hover:underline">
+              View all →
+            </Link>
+          </div>
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {featured.map((r, i) => (
               <motion.div
-                key={title}
-                initial={{ opacity: 0, y: 20 }}
+                key={r.id}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-center"
+                transition={{ delay: i * 0.1 }}
               >
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <Icon className="h-7 w-7" />
-                </div>
-                <h3 className="mt-4 font-serif text-lg text-card-foreground">{title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{desc}</p>
+                <RestaurantCard restaurant={r} />
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Featured */}
-      <section className="py-16">
-        <div className="container">
-          <div className="flex items-center justify-between">
-            <h2 className="font-serif text-2xl text-foreground md:text-3xl">Featured Restaurants</h2>
-            <Link to="/restaurants" className="text-sm text-primary hover:underline flex items-center gap-1">
-              View All <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-          {featured.length === 0 ? (
-            <p className="mt-8 text-center text-muted-foreground py-12">No restaurants available yet. Check back soon!</p>
-          ) : (
-            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {featured.map((r) => (
-                <RestaurantCard key={r.id} restaurant={r} />
-              ))}
-            </div>
-          )}
+      {/* CTA */}
+      <section className="relative overflow-hidden py-16">
+        <img src={heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-black/65" />
+        <div className="container relative z-10 text-center">
+          <h2 className="font-serif text-3xl text-primary-foreground">Own a Restaurant?</h2>
+          <p className="mt-2 text-primary-foreground/80">Partner with FeastFleet and grow your business</p>
+          <Link to="/register-restaurant">
+            <Button size="lg" variant="secondary" className="mt-6 rounded-full font-semibold">
+              Register Your Restaurant
+            </Button>
+          </Link>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="border-t border-border bg-card py-10">
+        <div className="container flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground md:flex-row">
+          <div className="flex items-center gap-2">
+            <img src="/src/assets/logo.png" alt="FeastFleet" className="h-8 w-8" />
+            <span className="font-serif text-foreground">FeastFleet</span>
+          </div>
+          <p>© 2026 FeastFleet. All rights reserved.</p>
+          <div className="flex gap-4">
+            <a href="#" className="hover:text-foreground">Privacy</a>
+            <a href="#" className="hover:text-foreground">Terms</a>
+            <a href="#" className="hover:text-foreground">Support</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
