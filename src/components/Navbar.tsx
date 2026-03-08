@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import logo from "@/assets/logo.png";
 import { ShoppingCart, User, Search, LogOut, Store } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
@@ -20,7 +21,7 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-lg">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <span className="text-2xl">🍽️</span>
+          <img src={logo} alt="FeastFleet logo" className="h-8 w-8" />
           <span className="font-serif text-xl text-foreground">FeastFleet</span>
         </Link>
 
