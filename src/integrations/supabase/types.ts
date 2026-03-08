@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      delivery_profiles: {
+        Row: {
+          created_at: string
+          id: string
+          is_available: boolean
+          total_deliveries: number
+          total_earnings: number
+          user_id: string
+          vehicle_number: string
+          vehicle_type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_available?: boolean
+          total_deliveries?: number
+          total_earnings?: number
+          user_id: string
+          vehicle_number?: string
+          vehicle_type?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_available?: boolean
+          total_deliveries?: number
+          total_earnings?: number
+          user_id?: string
+          vehicle_number?: string
+          vehicle_type?: string
+        }
+        Relationships: []
+      }
       menu_items: {
         Row: {
           category: string
@@ -105,6 +138,7 @@ export type Database = {
       orders: {
         Row: {
           created_at: string
+          delivery_agent_id: string | null
           delivery_fee: number
           id: string
           items: Json
@@ -118,6 +152,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          delivery_agent_id?: string | null
           delivery_fee?: number
           id?: string
           items?: Json
@@ -131,6 +166,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          delivery_agent_id?: string | null
           delivery_fee?: number
           id?: string
           items?: Json
