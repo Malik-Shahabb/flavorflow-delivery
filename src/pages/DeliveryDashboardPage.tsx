@@ -297,14 +297,14 @@ const DeliveryDashboardPage = () => {
 
         {/* Delivery History */}
         <section>
-          <h2 className="font-serif text-xl text-foreground mb-4">📋 My Delivery History ({deliveredOrders.length})</h2>
-          {deliveredOrders.length === 0 ? (
+          <h2 className="font-serif text-xl text-foreground mb-4">📋 My Delivery History ({allDelivered.length})</h2>
+          {allDelivered.length === 0 ? (
             <div className="rounded-lg border border-border bg-card p-8 text-center text-muted-foreground">
               No deliveries completed yet
             </div>
           ) : (
             <div className="space-y-2">
-              {deliveredOrders.map((d) => (
+              {allDelivered.map((d) => (
                 <div key={d.id} className="rounded-lg border border-border bg-card p-4 flex items-center justify-between">
                   <div>
                     <p className="font-medium text-foreground">{d.restaurant_name}</p>
