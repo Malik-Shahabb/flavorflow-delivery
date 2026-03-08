@@ -74,9 +74,10 @@ interface MenuItemCardProps {
   restaurantName: string;
   isOpen?: boolean;
   deliveryFee?: number;
+  minOrder?: number;
 }
 
-const MenuItemCard = ({ item, restaurantId, restaurantName, isOpen = true, deliveryFee }: MenuItemCardProps) => {
+const MenuItemCard = ({ item, restaurantId, restaurantName, isOpen = true, deliveryFee, minOrder }: MenuItemCardProps) => {
   const { items, addItem, updateQuantity } = useCart();
   const cartItem = items.find((ci) => ci.menuItem.id === item.id);
   const reviewData = getItemReviewData(item.name);
@@ -166,7 +167,7 @@ const MenuItemCard = ({ item, restaurantId, restaurantName, isOpen = true, deliv
                 size="icon"
                 variant="ghost"
                 className="h-7 w-7 text-primary-foreground hover:bg-primary/80"
-                onClick={() => addItem(item, restaurantId, restaurantName, deliveryFee)}
+                onClick={() => addItem(item, restaurantId, restaurantName, deliveryFee, minOrder)}
               >
                 <Plus className="h-3.5 w-3.5" />
               </Button>
@@ -175,7 +176,7 @@ const MenuItemCard = ({ item, restaurantId, restaurantName, isOpen = true, deliv
             <Button
               size="sm"
               className="h-7 rounded-full bg-primary px-4 text-xs font-bold text-primary-foreground shadow-md hover:bg-primary/90"
-              onClick={() => addItem(item, restaurantId, restaurantName, deliveryFee)}
+              onClick={() => addItem(item, restaurantId, restaurantName, deliveryFee, minOrder)}
             >
               ADD
             </Button>

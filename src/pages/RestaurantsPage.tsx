@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import RestaurantCard from "@/components/RestaurantCard";
-import { restaurants as staticRestaurants, Restaurant } from "@/data/restaurants";
+import { Restaurant } from "@/data/restaurants";
 import { useRestaurants } from "@/hooks/useRestaurants";
 
-const cuisineFilters = ["All", "Chinese", "Italian", "Indian", "Japanese", "American", "Mediterranean"];
+const cuisineFilters = ["All", "Chinese", "Italian", "Indian", "Japanese", "American", "Mediterranean", "Desi"];
 
 const RestaurantsPage = () => {
   const [search, setSearch] = useState("");
@@ -22,8 +22,9 @@ const RestaurantsPage = () => {
   const [sortBy, setSortBy] = useState<"default" | "rating" | "delivery" | "price">("default");
   const { data: dbRestaurants } = useRestaurants();
 
+  // Only approved DB restaurants — no static restaurants
   const allRestaurants: Restaurant[] = useMemo(() => {
-    const dbMapped: Restaurant[] = (dbRestaurants || [])
+    return (dbRestaurants || [])
       .filter((r) => r.is_approved)
       .map((r) => ({
         id: r.id,
@@ -49,7 +50,6 @@ const RestaurantsPage = () => {
           isPopular: m.is_popular,
         })),
       }));
-    return [...dbMapped, ...staticRestaurants];
   }, [dbRestaurants]);
 
   const filtered = useMemo(() => {

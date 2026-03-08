@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface CartContextType {
   items: CartItem[];
-  addItem: (item: MenuItem, restaurantId: string, restaurantName: string, deliveryFee?: number) => void;
+  addItem: (item: MenuItem, restaurantId: string, restaurantName: string, deliveryFee?: number, minOrder?: number) => void;
   removeItem: (itemId: string) => void;
   updateQuantity: (itemId: string, quantity: number) => void;
   clearCart: () => void;
@@ -23,10 +23,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [items, setItems] = useState<CartItem[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
 
-  const addItem = useCallback((item: MenuItem, restaurantId: string, restaurantName: string, deliveryFee?: number) => {
+  const addItem = useCallback((item: MenuItem, restaurantId: string, restaurantName: string, deliveryFee?: number, minOrder?: number) => {
     setItems((prev) => {
       if (prev.length > 0 && prev[0].restaurantId !== restaurantId) {
-        return [{ menuItem: item, quantity: 1, restaurantId, restaurantName, deliveryFee }];
+        return [{ menuItem: item, quantity: 1, restaurantId, restaurantName, deliveryFee, minOrder }];
       }
       const existing = prev.find((ci) => ci.menuItem.id === item.id);
       if (existing) {
@@ -34,7 +34,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
           ci.menuItem.id === item.id ? { ...ci, quantity: ci.quantity + 1 } : ci
         );
       }
-      return [...prev, { menuItem: item, quantity: 1, restaurantId, restaurantName, deliveryFee }];
+      return [...prev, { menuItem: item, quantity: 1, restaurantId, restaurantName, deliveryFee, minOrder }];
     });
   }, []);
 
@@ -73,6 +73,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         total,
         status: "confirmed",
         restaurantName,
+        restaurantId,
         estimatedDelivery: "30-40 min",
         createdAt: new Date(),
       };

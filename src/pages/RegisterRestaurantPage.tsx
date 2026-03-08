@@ -78,10 +78,48 @@ const RegisterRestaurantPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const validItems = menuItems.filter((m) => m.name && m.price);
+    // Validation
+    if (name.trim().length < 2 || name.trim().length > 100) {
+      toast.error("Restaurant name must be 2-100 characters");
+      return;
+    }
+    if (cuisine.trim().length < 2 || cuisine.trim().length > 50) {
+      toast.error("Cuisine must be 2-50 characters");
+      return;
+    }
+    if (address.trim().length < 5 || address.trim().length > 200) {
+      toast.error("Address must be 5-200 characters");
+      return;
+    }
+
+    const parsedFee = parseFloat(deliveryFee);
+    const parsedMin = parseFloat(minOrder);
+    if (isNaN(parsedFee) || parsedFee < 0 || parsedFee > 500) {
+      toast.error("Delivery fee must be between ₹0 and ₹500");
+      return;
+    }
+    if (isNaN(parsedMin) || parsedMin < 0 || parsedMin > 5000) {
+      toast.error("Minimum order must be between ₹0 and ₹5000");
+      return;
+    }
+
+    const validItems = menuItems.filter((m) => m.name.trim() && m.price);
     if (validItems.length === 0) {
       toast.error("Please add at least one menu item with a name and price.");
       return;
+    }
+
+    // Validate each menu item
+    for (const item of validItems) {
+      if (item.name.trim().length > 100) {
+        toast.error(`Menu item "${item.name}" name is too long (max 100 chars)`);
+        return;
+      }
+      const price = parseFloat(item.price);
+      if (isNaN(price) || price <= 0 || price > 10000) {
+        toast.error(`Menu item "${item.name}" must have a price between ₹1 and ₹10,000`);
+        return;
+      }
     }
 
     setLoading(true);
@@ -90,14 +128,14 @@ const RegisterRestaurantPage = () => {
         .from("restaurants")
         .insert({
           owner_id: user.id,
-          name,
-          cuisine,
-          address,
+          name: name.trim(),
+          cuisine: cuisine.trim(),
+          address: address.trim(),
           delivery_time: deliveryTime,
-          delivery_fee: parseFloat(deliveryFee) || 2.99,
-          min_order: parseFloat(minOrder) || 10,
-          image: image || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=400&fit=crop",
-          tags: tags ? tags.split(",").map((t) => t.trim()) : [],
+          delivery_fee: parsedFee,
+          min_order: parsedMin,
+          image: image.trim() || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=400&fit=crop",
+          tags: tags ? tags.split(",").map((t) => t.trim()).filter(Boolean).slice(0, 5) : [],
         })
         .select()
         .single();
@@ -106,11 +144,11 @@ const RegisterRestaurantPage = () => {
 
       const itemsToInsert = validItems.map((m) => ({
         restaurant_id: restaurant.id,
-        name: m.name,
-        description: m.description,
+        name: m.name.trim(),
+        description: m.description.trim().slice(0, 500),
         price: parseFloat(m.price),
-        category: m.category,
-        image: m.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&h=200&fit=crop",
+        category: m.category || "Mains",
+        image: m.image.trim() || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&h=200&fit=crop",
         is_veg: m.is_veg,
         is_popular: m.is_popular,
       }));
@@ -139,105 +177,106 @@ const RegisterRestaurantPage = () => {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="container mt-8 max-w-3xl space-y-8">
-        {/* Restaurant Details */}
-        <div className="rounded-xl border border-border bg-card p-6 space-y-4">
-          <h2 className="font-serif text-xl text-card-foreground">Restaurant Details</h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
-              <Label>Restaurant Name *</Label>
-              <Input required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. The Golden Wok" className="mt-1" />
-            </div>
-            <div>
-              <Label>Cuisine *</Label>
-              <Input required value={cuisine} onChange={(e) => setCuisine(e.target.value)} placeholder="e.g. Chinese · Asian Fusion" className="mt-1" />
-            </div>
-            <div className="sm:col-span-2">
-              <Label>Address *</Label>
-              <Input required value={address} onChange={(e) => setAddress(e.target.value)} placeholder="123 Main Street" className="mt-1" />
-            </div>
-            <div>
-              <Label>Delivery Time</Label>
-              <Input value={deliveryTime} onChange={(e) => setDeliveryTime(e.target.value)} placeholder="30-45 min" className="mt-1" />
-            </div>
-            <div>
-              <Label>Delivery Fee ($)</Label>
-              <Input type="number" step="0.01" value={deliveryFee} onChange={(e) => setDeliveryFee(e.target.value)} className="mt-1" />
-            </div>
-            <div>
-              <Label>Minimum Order ($)</Label>
-              <Input type="number" step="0.01" value={minOrder} onChange={(e) => setMinOrder(e.target.value)} className="mt-1" />
-            </div>
-            <div>
-              <Label>Image URL</Label>
-              <Input value={image} onChange={(e) => setImage(e.target.value)} placeholder="https://..." className="mt-1" />
-            </div>
-            <div className="sm:col-span-2">
-              <Label>Tags (comma-separated)</Label>
-              <Input value={tags} onChange={(e) => setTags(e.target.value)} placeholder="Popular, Free delivery over $30" className="mt-1" />
-            </div>
-          </div>
-        </div>
-
-        {/* Menu Items */}
-        <div className="rounded-xl border border-border bg-card p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="font-serif text-xl text-card-foreground">Menu Items</h2>
-            <Button type="button" variant="outline" size="sm" className="gap-1" onClick={addMenuItem}>
-              <Plus className="h-4 w-4" /> Add Item
-            </Button>
-          </div>
-
-          {menuItems.map((item, idx) => (
-            <div key={idx} className="rounded-lg border border-border p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">Item {idx + 1}</span>
-                {menuItems.length > 1 && (
-                  <Button type="button" variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => removeMenuItem(idx)}>
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                )}
+      <div className="container mt-8 max-w-3xl">
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Restaurant Details */}
+          <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+            <h2 className="font-serif text-xl text-card-foreground">Restaurant Details</h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <Label>Restaurant Name *</Label>
+                <Input required placeholder="My Restaurant" value={name} onChange={(e) => setName(e.target.value)} className="mt-1" maxLength={100} />
               </div>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div>
-                  <Label>Name *</Label>
-                  <Input value={item.name} onChange={(e) => updateMenuItem(idx, "name", e.target.value)} placeholder="Kung Pao Chicken" className="mt-1" />
-                </div>
-                <div>
-                  <Label>Price ($) *</Label>
-                  <Input type="number" step="0.01" value={item.price} onChange={(e) => updateMenuItem(idx, "price", e.target.value)} placeholder="14.99" className="mt-1" />
-                </div>
-                <div>
-                  <Label>Category</Label>
-                  <Input value={item.category} onChange={(e) => updateMenuItem(idx, "category", e.target.value)} placeholder="Mains" className="mt-1" />
-                </div>
-                <div>
-                  <Label>Image URL</Label>
-                  <Input value={item.image} onChange={(e) => updateMenuItem(idx, "image", e.target.value)} placeholder="https://..." className="mt-1" />
-                </div>
-                <div className="sm:col-span-2">
-                  <Label>Description</Label>
-                  <Input value={item.description} onChange={(e) => updateMenuItem(idx, "description", e.target.value)} placeholder="Spicy stir-fried chicken..." className="mt-1" />
-                </div>
-                <div className="flex items-center gap-6">
-                  <div className="flex items-center gap-2">
-                    <Switch checked={item.is_veg} onCheckedChange={(v) => updateMenuItem(idx, "is_veg", v)} />
-                    <Label>Vegetarian</Label>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Switch checked={item.is_popular} onCheckedChange={(v) => updateMenuItem(idx, "is_popular", v)} />
-                    <Label>Popular</Label>
-                  </div>
-                </div>
+              <div>
+                <Label>Cuisine *</Label>
+                <Input required placeholder="Italian, Indian..." value={cuisine} onChange={(e) => setCuisine(e.target.value)} className="mt-1" maxLength={50} />
+              </div>
+              <div className="sm:col-span-2">
+                <Label>Address *</Label>
+                <Input required placeholder="123 Main Street" value={address} onChange={(e) => setAddress(e.target.value)} className="mt-1" maxLength={200} />
+              </div>
+              <div>
+                <Label>Delivery Time</Label>
+                <Input placeholder="30-45 min" value={deliveryTime} onChange={(e) => setDeliveryTime(e.target.value)} className="mt-1" maxLength={30} />
+              </div>
+              <div>
+                <Label>Delivery Fee (₹)</Label>
+                <Input type="number" step="0.01" min="0" max="500" placeholder="2.99" value={deliveryFee} onChange={(e) => setDeliveryFee(e.target.value)} className="mt-1" />
+              </div>
+              <div>
+                <Label>Minimum Order (₹)</Label>
+                <Input type="number" step="0.01" min="0" max="5000" placeholder="10" value={minOrder} onChange={(e) => setMinOrder(e.target.value)} className="mt-1" />
+              </div>
+              <div>
+                <Label>Tags (comma-separated)</Label>
+                <Input placeholder="Popular, Fast" value={tags} onChange={(e) => setTags(e.target.value)} className="mt-1" maxLength={100} />
+              </div>
+              <div className="sm:col-span-2">
+                <Label>Image URL (optional)</Label>
+                <Input placeholder="https://..." value={image} onChange={(e) => setImage(e.target.value)} className="mt-1" maxLength={500} />
               </div>
             </div>
-          ))}
-        </div>
+          </div>
 
-        <Button type="submit" size="lg" className="w-full rounded-full" disabled={loading}>
-          {loading ? "Registering..." : "Register Restaurant"}
-        </Button>
-      </form>
+          {/* Menu Items */}
+          <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="font-serif text-xl text-card-foreground">Menu Items</h2>
+              <Button type="button" variant="outline" size="sm" onClick={addMenuItem} className="gap-1.5">
+                <Plus className="h-4 w-4" /> Add Item
+              </Button>
+            </div>
+            {menuItems.map((item, idx) => (
+              <div key={idx} className="rounded-lg border border-border bg-background p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-muted-foreground">Item {idx + 1}</span>
+                  {menuItems.length > 1 && (
+                    <Button type="button" variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => removeMenuItem(idx)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <Label>Name *</Label>
+                    <Input required placeholder="Item name" value={item.name} onChange={(e) => updateMenuItem(idx, "name", e.target.value)} className="mt-1" maxLength={100} />
+                  </div>
+                  <div>
+                    <Label>Price (₹) *</Label>
+                    <Input required type="number" step="0.01" min="1" max="10000" placeholder="9.99" value={item.price} onChange={(e) => updateMenuItem(idx, "price", e.target.value)} className="mt-1" />
+                  </div>
+                  <div>
+                    <Label>Category</Label>
+                    <Input placeholder="Mains" value={item.category} onChange={(e) => updateMenuItem(idx, "category", e.target.value)} className="mt-1" maxLength={50} />
+                  </div>
+                  <div>
+                    <Label>Image URL</Label>
+                    <Input placeholder="https://..." value={item.image} onChange={(e) => updateMenuItem(idx, "image", e.target.value)} className="mt-1" maxLength={500} />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <Label>Description</Label>
+                    <Input placeholder="Short description" value={item.description} onChange={(e) => updateMenuItem(idx, "description", e.target.value)} className="mt-1" maxLength={500} />
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <Switch checked={item.is_veg} onCheckedChange={(v) => updateMenuItem(idx, "is_veg", v)} />
+                      <Label>Veg</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Switch checked={item.is_popular} onCheckedChange={(v) => updateMenuItem(idx, "is_popular", v)} />
+                      <Label>Popular</Label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <Button type="submit" className="w-full rounded-full" size="lg" disabled={loading}>
+            {loading ? "Registering..." : "Register Restaurant"}
+          </Button>
+        </form>
+      </div>
     </div>
   );
 };
