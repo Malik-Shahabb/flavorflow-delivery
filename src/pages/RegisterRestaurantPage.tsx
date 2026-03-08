@@ -118,7 +118,7 @@ const RegisterRestaurantPage = () => {
       const { error: mError } = await supabase.from("menu_items").insert(itemsToInsert);
       if (mError) throw mError;
 
-      toast.success("Restaurant registered successfully!");
+      toast.success("Restaurant registered! It will be visible after admin approval.", { duration: 6000 });
       navigate(`/restaurant/${restaurant.id}`);
     } catch (err: any) {
       toast.error(err.message || "Failed to register restaurant");

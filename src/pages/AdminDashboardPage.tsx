@@ -11,7 +11,11 @@ import {
   ShoppingBag,
   TrendingUp,
   Shield,
+  CheckCircle,
+  XCircle,
+  Clock,
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface Stats {
   totalUsers: number;
@@ -32,6 +36,7 @@ interface RestaurantRow {
   name: string;
   cuisine: string;
   is_open: boolean;
+  is_approved: boolean;
   owner_id: string;
   created_at: string;
 }
@@ -43,7 +48,7 @@ const AdminDashboardPage = () => {
   const [stats, setStats] = useState<Stats>({ totalUsers: 0, totalRestaurants: 0, totalOrders: 0, totalRevenue: 0 });
   const [users, setUsers] = useState<UserRow[]>([]);
   const [restaurants, setRestaurants] = useState<RestaurantRow[]>([]);
-  const [activeTab, setActiveTab] = useState<"overview" | "users" | "restaurants">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "users" | "restaurants" | "pending">("overview");
 
   useEffect(() => {
     if (!isReady || !user) {
@@ -70,7 +75,7 @@ const AdminDashboardPage = () => {
   const loadData = async () => {
     const [profilesRes, restaurantsRes, ordersRes] = await Promise.all([
       supabase.from("profiles").select("id, full_name, phone, created_at"),
-      supabase.from("restaurants").select("id, name, cuisine, is_open, owner_id, created_at"),
+      supabase.from("restaurants").select("id, name, cuisine, is_open, is_approved, owner_id, created_at"),
       supabase.from("orders").select("id, total"),
     ]);
 
@@ -84,6 +89,23 @@ const AdminDashboardPage = () => {
       totalOrders: orders.length,
       totalRevenue: orders.reduce((s: number, o: any) => s + (o.total || 0), 0),
     });
+  };
+
+  const handleApproval = async (restaurantId: string, approve: boolean) => {
+    const { error } = await supabase
+      .from("restaurants")
+      .update({ is_approved: approve })
+      .eq("id", restaurantId);
+
+    if (error) {
+      toast.error("Failed to update restaurant status");
+      return;
+    }
+
+    toast.success(approve ? "Restaurant approved!" : "Restaurant rejected.");
+    setRestaurants((prev) =>
+      prev.map((r) => (r.id === restaurantId ? { ...r, is_approved: approve } : r))
+    );
   };
 
   if (loading) {
@@ -113,6 +135,8 @@ const AdminDashboardPage = () => {
       </div>
     );
   }
+
+  const pendingRestaurants = restaurants.filter((r) => !r.is_approved);
 
   const statCards = [
     { label: "Total Users", value: stats.totalUsers, icon: Users, color: "text-primary" },
@@ -151,17 +175,22 @@ const AdminDashboardPage = () => {
 
         {/* Tabs */}
         <div className="mt-8 flex gap-2 border-b border-border">
-          {(["overview", "users", "restaurants"] as const).map((tab) => (
+          {(["overview", "users", "restaurants", "pending"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2.5 text-sm font-medium capitalize transition-colors ${
+              className={`relative px-4 py-2.5 text-sm font-medium capitalize transition-colors ${
                 activeTab === tab
                   ? "border-b-2 border-primary text-foreground"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {tab}
+              {tab === "pending" ? "Pending Approval" : tab}
+              {tab === "pending" && pendingRestaurants.length > 0 && (
+                <span className="ml-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
+                  {pendingRestaurants.length}
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -173,6 +202,7 @@ const AdminDashboardPage = () => {
               <div className="space-y-3 text-sm text-muted-foreground">
                 <p>• {stats.totalUsers} registered users</p>
                 <p>• {stats.totalRestaurants} restaurants on the platform</p>
+                <p>• {pendingRestaurants.length} restaurants pending approval</p>
                 <p>• {stats.totalOrders} orders processed</p>
                 <p>• ₹{stats.totalRevenue.toFixed(2)} total revenue generated</p>
               </div>
@@ -210,6 +240,7 @@ const AdminDashboardPage = () => {
                     <th className="px-4 py-3 text-left font-medium text-muted-foreground">Name</th>
                     <th className="px-4 py-3 text-left font-medium text-muted-foreground hidden sm:table-cell">Cuisine</th>
                     <th className="px-4 py-3 text-left font-medium text-muted-foreground">Status</th>
+                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">Approval</th>
                     <th className="px-4 py-3 text-left font-medium text-muted-foreground hidden sm:table-cell">Registered</th>
                   </tr>
                 </thead>
@@ -221,11 +252,44 @@ const AdminDashboardPage = () => {
                       <td className="px-4 py-3">
                         <Badge variant={r.is_open ? "default" : "secondary"}>{r.is_open ? "Open" : "Closed"}</Badge>
                       </td>
+                      <td className="px-4 py-3">
+                        <Badge variant={r.is_approved ? "default" : "destructive"} className="gap-1">
+                          {r.is_approved ? <><CheckCircle className="h-3 w-3" /> Approved</> : <><Clock className="h-3 w-3" /> Pending</>}
+                        </Badge>
+                      </td>
                       <td className="px-4 py-3 text-muted-foreground hidden sm:table-cell">{new Date(r.created_at).toLocaleDateString()}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+
+          {activeTab === "pending" && (
+            <div className="space-y-4">
+              {pendingRestaurants.length === 0 ? (
+                <div className="rounded-xl border border-border bg-card p-8 text-center">
+                  <CheckCircle className="mx-auto h-12 w-12 text-muted-foreground/40" />
+                  <p className="mt-3 text-muted-foreground">No restaurants pending approval.</p>
+                </div>
+              ) : (
+                pendingRestaurants.map((r) => (
+                  <div key={r.id} className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <h4 className="font-medium text-card-foreground">{r.name}</h4>
+                      <p className="text-sm text-muted-foreground">{r.cuisine} • Registered {new Date(r.created_at).toLocaleDateString()}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button size="sm" className="gap-1.5" onClick={() => handleApproval(r.id, true)}>
+                        <CheckCircle className="h-4 w-4" /> Approve
+                      </Button>
+                      <Button size="sm" variant="destructive" className="gap-1.5" onClick={() => handleApproval(r.id, false)}>
+                        <XCircle className="h-4 w-4" /> Reject
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           )}
         </div>

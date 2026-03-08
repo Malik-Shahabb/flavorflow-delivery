@@ -26,6 +26,7 @@ export interface DbRestaurant {
   image: string;
   address: string;
   is_open: boolean;
+  is_approved: boolean;
   tags: string[];
   menu: DbMenuItem[];
 }
