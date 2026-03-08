@@ -89,10 +89,38 @@ const DeliveryDashboardPage = () => {
     fetchDeliveredOrders();
   };
 
-  const availableOrders = useMemo(() =>
-    orders.filter((o) => (o.status === "preparing" || o.status === "confirmed") && !o.delivery_agent_id),
-    [orders]
-  );
+  const demoOrders: DeliveryOrder[] = [
+    {
+      id: "demo-001",
+      restaurant_name: "Spice Garden",
+      status: "preparing",
+      total: 340,
+      created_at: new Date(Date.now() - 10 * 60000).toISOString(),
+      items: [{ name: "Paneer Tikka", quantity: 2 }, { name: "Garlic Naan", quantity: 3 }],
+      delivery_agent_id: null,
+    },
+    {
+      id: "demo-002",
+      restaurant_name: "Biryani House",
+      status: "confirmed",
+      total: 520,
+      created_at: new Date(Date.now() - 5 * 60000).toISOString(),
+      items: [{ name: "Chicken Biryani", quantity: 2 }, { name: "Raita", quantity: 2 }],
+      delivery_agent_id: null,
+    },
+    {
+      id: "demo-003",
+      restaurant_name: "Dosa Corner",
+      status: "preparing",
+      total: 210,
+      created_at: new Date(Date.now() - 15 * 60000).toISOString(),
+      items: [{ name: "Masala Dosa", quantity: 1 }, { name: "Filter Coffee", quantity: 2 }],
+      delivery_agent_id: null,
+    },
+  ];
+
+  const realAvailable = orders.filter((o) => (o.status === "preparing" || o.status === "confirmed") && !o.delivery_agent_id);
+  const availableOrders = realAvailable.length > 0 ? realAvailable : demoOrders;
 
   const myActiveOrders = useMemo(() =>
     orders.filter((o) => o.status === "out-for-delivery" && o.delivery_agent_id === user?.id),
