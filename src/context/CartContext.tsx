@@ -73,6 +73,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         total,
         status: "confirmed",
         restaurantName,
+        restaurantId,
         estimatedDelivery: "30-40 min",
         createdAt: new Date(),
       };
