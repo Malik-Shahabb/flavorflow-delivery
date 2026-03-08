@@ -88,8 +88,8 @@ const CheckoutPage = () => {
             </div>
           </div>
 
-          <Button type="submit" className="w-full rounded-full" size="lg" disabled={isSubmitting}>
-            {isSubmitting ? "Processing..." : `Place Order — ₹${total.toFixed(2)}`}
+          <Button type="submit" className="w-full rounded-full" size="lg">
+            Proceed to Payment — ₹{total.toFixed(2)}
           </Button>
         </form>
       </div>
