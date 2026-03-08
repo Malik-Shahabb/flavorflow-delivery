@@ -53,6 +53,7 @@ const App = () => (
                 <Route path="/analytics/:id" element={<RestaurantAnalyticsPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              <RecentOrdersSummary />
             </BrowserRouter>
           </CartProvider>
         </AuthProvider>
