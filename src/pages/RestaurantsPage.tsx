@@ -60,7 +60,7 @@ const RestaurantsPage = () => {
         r.name.toLowerCase().includes(q) ||
         r.cuisine.toLowerCase().includes(q) ||
         (r.tags || []).some((t) => t.toLowerCase().includes(q)) ||
-        r.menu.some((m) => m.name.toLowerCase().includes(q) || m.category.toLowerCase().includes(q));
+        r.menu.some((m) => m.name.toLowerCase().includes(q) || m.category.toLowerCase().includes(q) || m.description.toLowerCase().includes(q));
       const matchCuisine =
         activeCuisine === "All" || r.cuisine.toLowerCase().includes(activeCuisine.toLowerCase());
       const matchOpen = !showOpenOnly || r.isOpen;
