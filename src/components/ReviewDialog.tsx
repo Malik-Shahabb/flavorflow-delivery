@@ -32,6 +32,14 @@ const ReviewDialog = ({ orderId, restaurantId, restaurantName, onReviewSubmitted
     if (!user || rating === 0) return;
     setSubmitting(true);
     try {
+      // Validate that IDs are valid UUIDs before submitting
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(orderId) || !uuidRegex.test(restaurantId)) {
+        toast.error("Cannot submit review for this order.");
+        setSubmitting(false);
+        return;
+      }
+
       const { error } = await supabase.from("reviews").insert({
         user_id: user.id,
         restaurant_id: restaurantId,
