@@ -14,6 +14,9 @@ interface DeliveryOrder {
   created_at: string;
   items: any;
   delivery_agent_id: string | null;
+  customer_name?: string;
+  customer_phone?: string;
+  customer_address?: string;
 }
 
 const DeliveryDashboardPage = () => {
