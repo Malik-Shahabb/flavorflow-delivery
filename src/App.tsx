@@ -18,6 +18,8 @@ import ManageRestaurantPage from "./pages/ManageRestaurantPage";
 import OwnerDashboardPage from "./pages/OwnerDashboardPage";
 import OwnerOrdersPage from "./pages/OwnerOrdersPage";
 import ProfilePage from "./pages/ProfilePage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
+import RestaurantAnalyticsPage from "./pages/RestaurantAnalyticsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +46,8 @@ const App = () => (
               <Route path="/owner-dashboard" element={<OwnerDashboardPage />} />
               <Route path="/owner-orders/:id" element={<OwnerOrdersPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/admin" element={<AdminDashboardPage />} />
+              <Route path="/analytics/:id" element={<RestaurantAnalyticsPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
