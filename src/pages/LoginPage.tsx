@@ -139,7 +139,7 @@ const LoginPage = () => {
               onClick={() => setSelectedRole("owner")}
               className="group flex flex-col items-center gap-3 rounded-xl border-2 border-border bg-card p-6 transition-all hover:border-primary hover:shadow-card"
             >
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                 <Store className="h-7 w-7" />
               </div>
               <div>
@@ -152,7 +152,7 @@ const LoginPage = () => {
               onClick={() => setSelectedRole("delivery")}
               className="group flex flex-col items-center gap-3 rounded-xl border-2 border-border bg-card p-6 transition-all hover:border-primary hover:shadow-card"
             >
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-chart-2/20 text-chart-2 transition-colors group-hover:bg-chart-2 group-hover:text-primary-foreground">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                 <Bike className="h-7 w-7" />
               </div>
               <div>
