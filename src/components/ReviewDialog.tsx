@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,12 +27,27 @@ const ReviewDialog = ({ orderId, restaurantId, restaurantName, onReviewSubmitted
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [alreadyReviewed, setAlreadyReviewed] = useState(false);
+
+  // Check if user already reviewed this order
+  useEffect(() => {
+    if (!user || !orderId) return;
+    const checkExisting = async () => {
+      const { data } = await supabase
+        .from("reviews")
+        .select("id")
+        .eq("user_id", user.id)
+        .eq("order_id", orderId)
+        .maybeSingle();
+      if (data) setAlreadyReviewed(true);
+    };
+    checkExisting();
+  }, [user, orderId]);
 
   const handleSubmit = async () => {
     if (!user || rating === 0) return;
     setSubmitting(true);
     try {
-      // Validate that IDs are valid UUIDs before submitting
       const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       if (!uuidRegex.test(orderId) || !uuidRegex.test(restaurantId)) {
         toast.error("Cannot submit review for this order.");
@@ -45,16 +60,18 @@ const ReviewDialog = ({ orderId, restaurantId, restaurantName, onReviewSubmitted
         restaurant_id: restaurantId,
         order_id: orderId,
         rating,
-        comment,
+        comment: comment.trim().slice(0, 500),
       });
       if (error) {
         if (error.code === "23505") {
           toast.error("You've already reviewed this order.");
+          setAlreadyReviewed(true);
         } else {
           throw error;
         }
       } else {
         toast.success("Review submitted!");
+        setAlreadyReviewed(true);
         setOpen(false);
         onReviewSubmitted?.();
       }
@@ -64,6 +81,14 @@ const ReviewDialog = ({ orderId, restaurantId, restaurantName, onReviewSubmitted
       setSubmitting(false);
     }
   };
+
+  if (alreadyReviewed) {
+    return (
+      <span className="text-xs text-muted-foreground flex items-center gap-1">
+        <Star className="h-3.5 w-3.5 fill-warning text-warning" /> Reviewed
+      </span>
+    );
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -101,10 +126,11 @@ const ReviewDialog = ({ orderId, restaurantId, restaurantName, onReviewSubmitted
             {rating === 0 ? "Tap a star to rate" : `${rating} out of 5 stars`}
           </p>
           <Textarea
-            placeholder="Write a comment (optional)..."
+            placeholder="Write a comment (optional, max 500 chars)..."
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             rows={3}
+            maxLength={500}
           />
           <Button
             onClick={handleSubmit}

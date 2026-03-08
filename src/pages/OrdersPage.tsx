@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Package, ChefHat, Truck, CheckCircle2 } from "lucide-react";
+import { Package, ChefHat, Truck, CheckCircle2, XCircle } from "lucide-react";
 import ReviewDialog from "@/components/ReviewDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 const steps = [
   { status: "confirmed", label: "Order Confirmed", icon: Package },
@@ -18,6 +19,7 @@ interface DbOrder {
   id: string;
   status: string;
   restaurant_name: string;
+  restaurant_id: string;
   items: any;
   total: number;
   created_at: string;
@@ -28,6 +30,7 @@ const OrdersPage = () => {
   const { orders: localOrders } = useCart();
   const [dbOrders, setDbOrders] = useState<DbOrder[]>([]);
   const [loading, setLoading] = useState(true);
+  const [cancelling, setCancelling] = useState<string | null>(null);
 
   // Fetch orders from DB
   useEffect(() => {
@@ -77,15 +80,31 @@ const OrdersPage = () => {
     };
   }, [user]);
 
-  // Order advancement now runs globally in CartContext
+  const cancelOrder = async (orderId: string) => {
+    setCancelling(orderId);
+    try {
+      const { error } = await supabase
+        .from("orders")
+        .update({ status: "cancelled" })
+        .eq("id", orderId);
+      if (error) throw error;
+      setDbOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status: "cancelled" } : o));
+      toast.success("Order cancelled");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to cancel order");
+    } finally {
+      setCancelling(null);
+    }
+  };
 
   // Merge: show DB orders + local orders that don't have a dbOrderId (static restaurant orders)
   const allOrders = [
     ...dbOrders.map((o) => ({
       id: o.id,
       dbOrderId: o.id,
-      status: o.status as "confirmed" | "preparing" | "out-for-delivery" | "delivered",
+      status: o.status as "confirmed" | "preparing" | "out-for-delivery" | "delivered" | "cancelled",
       restaurantName: o.restaurant_name,
+      restaurantId: o.restaurant_id,
       items: Array.isArray(o.items) ? o.items : [],
       total: o.total,
       createdAt: new Date(o.created_at),
@@ -123,9 +142,10 @@ const OrdersPage = () => {
         <div className="mt-8 space-y-6">
           {allOrders.map((order) => {
             const currentIdx = steps.findIndex((s) => s.status === order.status);
+            const isCancelled = order.status === "cancelled";
 
             return (
-              <div key={order.id} className="rounded-xl border border-border bg-card p-4 space-y-4 sm:p-6">
+              <div key={order.id} className={`rounded-xl border bg-card p-4 space-y-4 sm:p-6 ${isCancelled ? "border-destructive/30 opacity-75" : "border-border"}`}>
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <h3 className="font-serif text-base text-card-foreground sm:text-lg">
@@ -134,23 +154,27 @@ const OrdersPage = () => {
                     <p className="text-sm text-muted-foreground">{order.restaurantName}</p>
                   </div>
                   <span className={`self-start text-xs font-semibold px-3 py-1 rounded-full ${
-                    order.status === "delivered"
-                      ? "bg-success/10 text-success"
-                      : "bg-primary/10 text-primary"
+                    isCancelled
+                      ? "bg-destructive/10 text-destructive"
+                      : order.status === "delivered"
+                        ? "bg-success/10 text-success"
+                        : "bg-primary/10 text-primary"
                   }`}>
-                    {steps.find((s) => s.status === order.status)?.label}
+                    {isCancelled ? "Cancelled" : steps.find((s) => s.status === order.status)?.label}
                   </span>
                 </div>
 
                 {/* Progress bar */}
-                <div className="flex gap-1">
-                  {steps.map((_, i) => (
-                    <div
-                      key={i}
-                      className={`h-1.5 flex-1 rounded-full ${i <= currentIdx ? "bg-primary" : "bg-muted"}`}
-                    />
-                  ))}
-                </div>
+                {!isCancelled && (
+                  <div className="flex gap-1">
+                    {steps.map((_, i) => (
+                      <div
+                        key={i}
+                        className={`h-1.5 flex-1 rounded-full ${i <= currentIdx ? "bg-primary" : "bg-muted"}`}
+                      />
+                    ))}
+                  </div>
+                )}
 
                 {/* Items */}
                 <div className="space-y-2">
@@ -170,8 +194,22 @@ const OrdersPage = () => {
                   </div>
                 </div>
 
+                {/* Cancel button for confirmed DB orders */}
+                {order.status === "confirmed" && order.dbOrderId && (
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="w-full rounded-full"
+                    onClick={() => cancelOrder(order.id)}
+                    disabled={cancelling === order.id}
+                  >
+                    <XCircle className="h-4 w-4 mr-1.5" />
+                    {cancelling === order.id ? "Cancelling..." : "Cancel Order"}
+                  </Button>
+                )}
+
                 {/* Auto-advancing notice for non-delivered */}
-                {order.status !== "delivered" && (
+                {!isCancelled && order.status !== "delivered" && order.status !== "confirmed" && (
                   <div className="flex items-center gap-2">
                     <div className="relative flex-1 h-1.5 rounded-full bg-muted overflow-hidden">
                       <div className="absolute inset-0 h-full w-1/3 rounded-full bg-primary animate-[shimmer_1.5s_ease-in-out_infinite]" />
@@ -180,13 +218,17 @@ const OrdersPage = () => {
                   </div>
                 )}
 
+                {isCancelled && (
+                  <p className="text-center text-sm font-semibold text-destructive">❌ Order Cancelled</p>
+                )}
+
                 {order.status === "delivered" && (
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-semibold text-success">🎉 Delivered!</p>
-                    {order.dbOrderId ? (
+                    {order.dbOrderId && order.restaurantId ? (
                       <ReviewDialog
                         orderId={order.dbOrderId}
-                        restaurantId={order.items[0]?.restaurantId || ""}
+                        restaurantId={order.restaurantId}
                         restaurantName={order.restaurantName}
                       />
                     ) : (
