@@ -156,7 +156,7 @@ export const restaurants: Restaurant[] = [
     rating: 4.4,
     reviewCount: 176,
     deliveryTime: "25-35 min",
-    deliveryFee: 26,
+    deliveryFee: 45,
     minOrder: 200,
     image: "https://images.unsplash.com/photo-1540914124281-342587941389?w=600&h=400&fit=crop",
     address: "888 Olive Street",
