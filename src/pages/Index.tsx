@@ -47,7 +47,7 @@ const Index = () => {
       {/* Hero */}
       <section className="relative overflow-hidden px-4 py-20 md:py-28">
         <img src={heroImage} alt="Delicious food spread" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-foreground/60" />
+        <div className="absolute inset-0 bg-black/60" />
         <div className="container relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -139,7 +139,7 @@ const Index = () => {
       {/* CTA */}
       <section className="relative overflow-hidden py-16">
         <img src={heroImage} alt="" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-foreground/65" />
+        <div className="absolute inset-0 bg-black/65" />
         <div className="container relative z-10 text-center">
           <h2 className="font-serif text-3xl text-primary-foreground">Own a Restaurant?</h2>
           <p className="mt-2 text-primary-foreground/80">Partner with FeastFleet and grow your business</p>
