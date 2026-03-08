@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
+import RecentOrdersSummary from "@/components/RecentOrdersSummary";
 import Index from "./pages/Index";
 import RestaurantsPage from "./pages/RestaurantsPage";
 import RestaurantDetailPage from "./pages/RestaurantDetailPage";
@@ -52,6 +53,7 @@ const App = () => (
                 <Route path="/analytics/:id" element={<RestaurantAnalyticsPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              <RecentOrdersSummary />
             </BrowserRouter>
           </CartProvider>
         </AuthProvider>
