@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RecentOrdersSummary from "@/components/RecentOrdersSummary";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import OnboardingTour from "@/components/OnboardingTour";
 import Index from "./pages/Index";
 import RestaurantsPage from "./pages/RestaurantsPage";
 import RestaurantDetailPage from "./pages/RestaurantDetailPage";
