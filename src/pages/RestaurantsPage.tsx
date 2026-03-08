@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import RestaurantCard from "@/components/RestaurantCard";
+import EmptyState from "@/components/EmptyState";
 import { restaurants as staticRestaurants, Restaurant } from "@/data/restaurants";
 import { useRestaurants } from "@/hooks/useRestaurants";
 
@@ -214,9 +215,7 @@ const RestaurantsPage = () => {
       <div className="container mt-8">
         <p className="mb-4 text-sm text-muted-foreground">{filtered.length} restaurant{filtered.length !== 1 ? "s" : ""} found</p>
         {filtered.length === 0 ? (
-          <div className="py-20 text-center">
-            <p className="text-lg text-muted-foreground">No restaurants found matching your criteria.</p>
-          </div>
+          <EmptyState type="search" />
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((r) => (

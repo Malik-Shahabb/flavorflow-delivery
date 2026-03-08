@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Package, ChefHat, Truck, CheckCircle2 } from "lucide-react";
 import ReviewDialog from "@/components/ReviewDialog";
+import DeliveryRatingDialog from "@/components/DeliveryRatingDialog";
+import { OrderListSkeleton } from "@/components/LoadingSkeleton";
+import EmptyState from "@/components/EmptyState";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthContext";
 
@@ -95,21 +98,21 @@ const OrdersPage = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <p className="text-muted-foreground">Loading orders...</p>
+      <div className="min-h-screen pb-16">
+        <div className="container max-w-2xl py-8">
+          <h1 className="font-serif text-3xl text-foreground">My Orders</h1>
+          <div className="mt-8">
+            <OrderListSkeleton />
+          </div>
+        </div>
       </div>
     );
   }
 
   if (allOrders.length === 0) {
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
-        <Package className="h-16 w-16 text-muted-foreground/40" />
-        <h2 className="mt-4 font-serif text-2xl text-foreground">No active orders</h2>
-        <p className="mt-2 text-muted-foreground">Your order history will appear here</p>
-        <Link to="/restaurants">
-          <Button className="mt-6 rounded-full" size="lg">Order Now</Button>
-        </Link>
+      <div className="min-h-screen pb-16">
+        <EmptyState type="orders" />
       </div>
     );
   }
@@ -181,17 +184,20 @@ const OrdersPage = () => {
                 )}
 
                 {order.status === "delivered" && (
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
                     <p className="text-sm font-semibold text-success">🎉 Delivered!</p>
-                    {order.dbOrderId ? (
-                      <ReviewDialog
-                        orderId={order.dbOrderId}
-                        restaurantId={order.items[0]?.restaurantId || ""}
-                        restaurantName={order.restaurantName}
-                      />
-                    ) : (
-                      <p className="text-xs text-muted-foreground">Review unavailable</p>
-                    )}
+                    <div className="flex gap-2">
+                      <DeliveryRatingDialog orderId={order.id} />
+                      {order.dbOrderId ? (
+                        <ReviewDialog
+                          orderId={order.dbOrderId}
+                          restaurantId={order.items[0]?.restaurantId || ""}
+                          restaurantName={order.restaurantName}
+                        />
+                      ) : (
+                        <p className="text-xs text-muted-foreground">Review unavailable</p>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
