@@ -21,7 +21,7 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-lg">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="FeastFleet logo" className="h-8 w-8" />
+          <img src={logo} alt="FeastFleet logo" className="h-10 w-10" />
           <span className="font-serif text-xl text-foreground">FeastFleet</span>
         </Link>
 
