@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from "react";
 import { CartItem, MenuItem, Order } from "@/data/restaurants";
 import { supabase } from "@/integrations/supabase/client";
 
