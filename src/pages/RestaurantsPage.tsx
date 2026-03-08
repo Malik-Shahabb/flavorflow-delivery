@@ -23,30 +23,32 @@ const RestaurantsPage = () => {
   const { data: dbRestaurants } = useRestaurants();
 
   const allRestaurants: Restaurant[] = useMemo(() => {
-    const dbMapped: Restaurant[] = (dbRestaurants || []).map((r) => ({
-      id: r.id,
-      name: r.name,
-      cuisine: r.cuisine,
-      rating: r.rating,
-      reviewCount: r.review_count,
-      deliveryTime: r.delivery_time,
-      deliveryFee: r.delivery_fee,
-      minOrder: r.min_order,
-      image: r.image,
-      address: r.address,
-      isOpen: r.is_open,
-      tags: r.tags || [],
-      menu: (r.menu || []).map((m) => ({
-        id: m.id,
-        name: m.name,
-        description: m.description,
-        price: m.price,
-        image: m.image,
-        category: m.category,
-        isVeg: m.is_veg,
-        isPopular: m.is_popular,
-      })),
-    }));
+    const dbMapped: Restaurant[] = (dbRestaurants || [])
+      .filter((r) => r.is_approved)
+      .map((r) => ({
+        id: r.id,
+        name: r.name,
+        cuisine: r.cuisine,
+        rating: r.rating,
+        reviewCount: r.review_count,
+        deliveryTime: r.delivery_time,
+        deliveryFee: r.delivery_fee,
+        minOrder: r.min_order,
+        image: r.image,
+        address: r.address,
+        isOpen: r.is_open,
+        tags: r.tags || [],
+        menu: (r.menu || []).map((m) => ({
+          id: m.id,
+          name: m.name,
+          description: m.description,
+          price: m.price,
+          image: m.image,
+          category: m.category,
+          isVeg: m.is_veg,
+          isPopular: m.is_popular,
+        })),
+      }));
     return [...dbMapped, ...staticRestaurants];
   }, [dbRestaurants]);
 

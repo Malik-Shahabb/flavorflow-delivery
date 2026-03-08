@@ -53,7 +53,7 @@ const LoginPage = () => {
           },
         });
         if (error) throw error;
-        toast.success("Account created! Check your email to confirm.");
+        toast.success("Account created! Please check your email and verify before signing in.", { duration: 6000 });
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
