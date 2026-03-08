@@ -17,6 +17,7 @@ const RestaurantsPage = () => {
   const [showVegOnly, setShowVegOnly] = useState(false);
   const [minRating, setMinRating] = useState(0);
   const [maxPrice, setMaxPrice] = useState(200);
+  const [maxDeliveryFee, setMaxDeliveryFee] = useState(50);
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState<"default" | "rating" | "delivery" | "price">("default");
   const { data: dbRestaurants } = useRestaurants();
@@ -60,7 +61,8 @@ const RestaurantsPage = () => {
       const matchRating = r.rating >= minRating;
       const matchVeg = !showVegOnly || r.menu.some((m) => m.isVeg);
       const matchPrice = r.menu.length === 0 || r.menu.some((m) => m.price <= maxPrice);
-      return matchSearch && matchCuisine && matchOpen && matchRating && matchVeg && matchPrice;
+      const matchDeliveryFee = r.deliveryFee <= maxDeliveryFee;
+      return matchSearch && matchCuisine && matchOpen && matchRating && matchVeg && matchPrice && matchDeliveryFee;
     });
 
     if (sortBy === "rating") results.sort((a, b) => b.rating - a.rating);
@@ -72,7 +74,7 @@ const RestaurantsPage = () => {
     });
 
     return results;
-  }, [search, activeCuisine, showOpenOnly, showVegOnly, minRating, maxPrice, sortBy, allRestaurants]);
+  }, [search, activeCuisine, showOpenOnly, showVegOnly, minRating, maxPrice, maxDeliveryFee, sortBy, allRestaurants]);
 
   return (
     <div className="min-h-screen pb-16">
@@ -133,12 +135,12 @@ const RestaurantsPage = () => {
           {/* Advanced Filters */}
           {showFilters && (
             <div className="mt-4 rounded-lg border border-border bg-background p-4 space-y-4">
-              <div className="grid gap-4 sm:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <div>
                   <label className="text-xs font-medium text-muted-foreground mb-2 block">
                     Minimum Rating: {minRating > 0 ? `${minRating}+` : "Any"}
                   </label>
-                  <div className="flex gap-1">
+                  <div className="flex flex-wrap gap-1">
                     {[0, 3, 3.5, 4, 4.5].map((r) => (
                       <button
                         key={r}
@@ -156,7 +158,7 @@ const RestaurantsPage = () => {
                 </div>
                 <div>
                   <label className="text-xs font-medium text-muted-foreground mb-2 block">
-                    Max Price: ₹{maxPrice}
+                    Max Item Price: ₹{maxPrice}
                   </label>
                   <Slider
                     value={[maxPrice]}
@@ -168,9 +170,22 @@ const RestaurantsPage = () => {
                   />
                 </div>
                 <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-2 block">
+                    Max Delivery Fee: ₹{maxDeliveryFee}
+                  </label>
+                  <Slider
+                    value={[maxDeliveryFee]}
+                    onValueChange={([v]) => setMaxDeliveryFee(v)}
+                    min={10}
+                    max={50}
+                    step={5}
+                    className="mt-2"
+                  />
+                </div>
+                <div>
                   <label className="text-xs font-medium text-muted-foreground mb-2 block">Sort By</label>
                   <div className="flex flex-wrap gap-1">
-                    {([["default", "Relevance"], ["rating", "Rating"], ["delivery", "Delivery Fee"], ["price", "Price"]] as const).map(([key, label]) => (
+                    {([["default", "Relevance"], ["rating", "Top Rated"], ["delivery", "Lowest Fee"], ["price", "Lowest Price"]] as const).map(([key, label]) => (
                       <button
                         key={key}
                         onClick={() => setSortBy(key)}
