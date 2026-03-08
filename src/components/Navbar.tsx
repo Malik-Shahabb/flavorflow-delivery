@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
-import { ShoppingCart, User, Search, LogOut, Store } from "lucide-react";
+import { ShoppingCart, User, Search, LogOut, Store, Moon, Sun } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/context/ThemeContext";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import NotificationBell from "@/components/NotificationBell";
