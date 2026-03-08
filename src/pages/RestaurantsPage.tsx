@@ -16,8 +16,8 @@ const RestaurantsPage = () => {
   const [showOpenOnly, setShowOpenOnly] = useState(false);
   const [showVegOnly, setShowVegOnly] = useState(false);
   const [minRating, setMinRating] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(200);
-  const [maxDeliveryFee, setMaxDeliveryFee] = useState(50);
+  const [maxPrice, setMaxPrice] = useState(800);
+  const [maxDeliveryFee, setMaxDeliveryFee] = useState(100);
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState<"default" | "rating" | "delivery" | "price">("default");
   const { data: dbRestaurants } = useRestaurants();
@@ -163,9 +163,9 @@ const RestaurantsPage = () => {
                   <Slider
                     value={[maxPrice]}
                     onValueChange={([v]) => setMaxPrice(v)}
-                    min={50}
-                    max={200}
-                    step={10}
+                    min={200}
+                    max={800}
+                    step={50}
                     className="mt-2"
                   />
                 </div>
@@ -176,9 +176,9 @@ const RestaurantsPage = () => {
                   <Slider
                     value={[maxDeliveryFee]}
                     onValueChange={([v]) => setMaxDeliveryFee(v)}
-                    min={10}
-                    max={50}
-                    step={5}
+                    min={30}
+                    max={100}
+                    step={10}
                     className="mt-2"
                   />
                 </div>
