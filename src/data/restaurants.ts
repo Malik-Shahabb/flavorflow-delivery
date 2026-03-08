@@ -31,6 +31,7 @@ export interface CartItem {
   restaurantId: string;
   restaurantName: string;
   deliveryFee?: number;
+  minOrder?: number;
 }
 
 export interface Order {
@@ -38,8 +39,9 @@ export interface Order {
   dbOrderId?: string;
   items: CartItem[];
   total: number;
-  status: "confirmed" | "preparing" | "out-for-delivery" | "delivered";
+  status: "confirmed" | "preparing" | "out-for-delivery" | "delivered" | "cancelled";
   restaurantName: string;
+  restaurantId?: string;
   estimatedDelivery: string;
   createdAt: Date;
 }
