@@ -180,12 +180,12 @@ const AdminDashboardPage = () => {
           )}
 
           {activeTab === "users" && (
-            <div className="rounded-xl border border-border bg-card overflow-hidden">
-              <table className="w-full text-sm">
+            <div className="rounded-xl border border-border bg-card overflow-x-auto">
+              <table className="w-full min-w-[400px] text-sm">
                 <thead className="bg-muted/50">
                   <tr>
                     <th className="px-4 py-3 text-left font-medium text-muted-foreground">Name</th>
-                    <th className="px-4 py-3 text-left font-medium text-muted-foreground">Phone</th>
+                    <th className="px-4 py-3 text-left font-medium text-muted-foreground hidden sm:table-cell">Phone</th>
                     <th className="px-4 py-3 text-left font-medium text-muted-foreground">Joined</th>
                   </tr>
                 </thead>
@@ -193,7 +193,7 @@ const AdminDashboardPage = () => {
                   {users.map((u) => (
                     <tr key={u.id}>
                       <td className="px-4 py-3 text-card-foreground">{u.full_name || "—"}</td>
-                      <td className="px-4 py-3 text-muted-foreground">{u.phone || "—"}</td>
+                      <td className="px-4 py-3 text-muted-foreground hidden sm:table-cell">{u.phone || "—"}</td>
                       <td className="px-4 py-3 text-muted-foreground">{new Date(u.created_at).toLocaleDateString()}</td>
                     </tr>
                   ))}
