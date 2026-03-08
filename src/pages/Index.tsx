@@ -155,7 +155,7 @@ const Index = () => {
       <footer className="border-t border-border bg-card py-10">
         <div className="container flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground md:flex-row">
           <div className="flex items-center gap-2">
-            <span className="text-lg">🍽️</span>
+            <img src="/src/assets/logo.png" alt="FeastFleet" className="h-8 w-8" />
             <span className="font-serif text-foreground">FeastFleet</span>
           </div>
           <p>© 2026 FeastFleet. All rights reserved.</p>
