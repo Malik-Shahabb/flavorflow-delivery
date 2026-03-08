@@ -20,6 +20,8 @@ const DeliveryDashboardPage = () => {
   const { user } = useAuth();
   const [orders, setOrders] = useState<DeliveryOrder[]>([]);
   const [deliveredOrders, setDeliveredOrders] = useState<DeliveryOrder[]>([]);
+  const [pickedDemoOrders, setPickedDemoOrders] = useState<DeliveryOrder[]>([]);
+  const [deliveredDemoOrders, setDeliveredDemoOrders] = useState<DeliveryOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [isOnline, setIsOnline] = useState(true);
 
@@ -58,7 +60,11 @@ const DeliveryDashboardPage = () => {
   const handlePickup = async (orderId: string) => {
     if (!user) return;
     if (orderId.startsWith("demo-")) {
-      toast.success("Demo order picked up! In a real scenario, this would assign you.");
+      const demoOrder = demoOrders.find((o) => o.id === orderId);
+      if (demoOrder) {
+        setPickedDemoOrders((prev) => [...prev, { ...demoOrder, status: "out-for-delivery", delivery_agent_id: user.id }]);
+      }
+      toast.success("Order picked up! Navigate to customer.");
       return;
     }
     const { error } = await supabase
@@ -79,6 +85,15 @@ const DeliveryDashboardPage = () => {
   };
 
   const handleDeliver = async (orderId: string) => {
+    if (orderId.startsWith("demo-")) {
+      const demoOrder = pickedDemoOrders.find((o) => o.id === orderId);
+      if (demoOrder) {
+        setPickedDemoOrders((prev) => prev.filter((o) => o.id !== orderId));
+        setDeliveredDemoOrders((prev) => [{ ...demoOrder, status: "delivered" }, ...prev]);
+      }
+      toast.success("Order marked as delivered!");
+      return;
+    }
     const { error } = await supabase
       .from("orders")
       .update({ status: "delivered", status_updated_at: new Date().toISOString() })
@@ -123,18 +138,21 @@ const DeliveryDashboardPage = () => {
     },
   ];
 
+  const pickedDemoIds = new Set(pickedDemoOrders.map((o) => o.id));
+  const deliveredDemoIds = new Set(deliveredDemoOrders.map((o) => o.id));
   const realAvailable = orders.filter((o) => (o.status === "preparing" || o.status === "confirmed") && !o.delivery_agent_id);
-  const availableOrders = realAvailable.length > 0 ? realAvailable : demoOrders;
+  const remainingDemos = demoOrders.filter((o) => !pickedDemoIds.has(o.id) && !deliveredDemoIds.has(o.id));
+  const availableOrders = [...realAvailable, ...remainingDemos];
 
-  const myActiveOrders = useMemo(() =>
-    orders.filter((o) => o.status === "out-for-delivery" && o.delivery_agent_id === user?.id),
-    [orders, user]
-  );
+  const realActive = orders.filter((o) => o.status === "out-for-delivery" && o.delivery_agent_id === user?.id);
+  const myActiveOrders = [...realActive, ...pickedDemoOrders];
+
+  const allDelivered = [...deliveredOrders, ...deliveredDemoOrders];
 
   const stats = {
-    delivered: deliveredOrders.length,
+    delivered: allDelivered.length,
     active: myActiveOrders.length,
-    earnings: deliveredOrders.reduce((sum, o) => sum + Number(o.total) * 0.1, 0).toFixed(0),
+    earnings: allDelivered.reduce((sum, o) => sum + Number(o.total) * 0.1, 0).toFixed(0),
   };
 
   if (loading) {
@@ -279,14 +297,14 @@ const DeliveryDashboardPage = () => {
 
         {/* Delivery History */}
         <section>
-          <h2 className="font-serif text-xl text-foreground mb-4">📋 My Delivery History ({deliveredOrders.length})</h2>
-          {deliveredOrders.length === 0 ? (
+          <h2 className="font-serif text-xl text-foreground mb-4">📋 My Delivery History ({allDelivered.length})</h2>
+          {allDelivered.length === 0 ? (
             <div className="rounded-lg border border-border bg-card p-8 text-center text-muted-foreground">
               No deliveries completed yet
             </div>
           ) : (
             <div className="space-y-2">
-              {deliveredOrders.map((d) => (
+              {allDelivered.map((d) => (
                 <div key={d.id} className="rounded-lg border border-border bg-card p-4 flex items-center justify-between">
                   <div>
                     <p className="font-medium text-foreground">{d.restaurant_name}</p>
