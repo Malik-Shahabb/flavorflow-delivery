@@ -36,47 +36,49 @@ const Navbar = () => {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1">
           <Link to="/restaurants">
-            <Button variant="ghost" size="icon" className="text-muted-foreground">
-              <Search className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground">
+              <Search className="h-4 w-4" />
             </Button>
           </Link>
           <Link to="/cart" className="relative">
-            <Button variant="ghost" size="icon" className="text-muted-foreground">
-              <ShoppingCart className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground">
+              <ShoppingCart className="h-4 w-4" />
               {totalItems > 0 && (
-                <Badge className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary p-0 text-xs text-primary-foreground">
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
                   {totalItems}
-                </Badge>
+                </span>
               )}
             </Button>
           </Link>
           {user ? (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5">
               <NotificationBell />
               <Link to="/owner-dashboard">
-                <Button variant="ghost" size="icon" className="text-muted-foreground" title="Owner Dashboard">
-                  <Store className="h-5 w-5" />
+                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground" title="Owner Dashboard">
+                  <Store className="h-4 w-4" />
                 </Button>
               </Link>
+              <div className="ml-1 h-5 w-px bg-border" />
               <Link to="/profile">
-                <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
-                  <User className="h-5 w-5" />
-                  <span className="hidden text-sm font-medium text-foreground md:inline">
-                    {user.user_metadata?.full_name || user.email}
+                <Button variant="ghost" size="sm" className="h-9 gap-1.5 rounded-full px-2.5 text-muted-foreground hover:text-foreground">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <User className="h-3.5 w-3.5" />
+                  </div>
+                  <span className="hidden text-xs font-medium text-foreground md:inline">
+                    {user.user_metadata?.full_name || user.email?.split('@')[0]}
                   </span>
                 </Button>
               </Link>
-              <Button variant="ghost" size="icon" className="text-muted-foreground" onClick={handleSignOut}>
-                <LogOut className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground" onClick={handleSignOut}>
+                <LogOut className="h-4 w-4" />
               </Button>
             </div>
           ) : (
             <Link to="/login">
-              <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
-                <User className="h-5 w-5" />
-                <span className="hidden md:inline">Sign In</span>
+              <Button size="sm" className="h-9 rounded-full px-4 text-xs font-medium">
+                Sign In
               </Button>
             </Link>
           )}
