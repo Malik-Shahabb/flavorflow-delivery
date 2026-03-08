@@ -52,7 +52,7 @@ const CheckoutPage = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>City</Label>
-                  <Input required placeholder="New York" className="mt-1" />
+                  <Input required placeholder="New Delhi" className="mt-1" />
                 </div>
                 <div>
                   <Label>ZIP Code</Label>
