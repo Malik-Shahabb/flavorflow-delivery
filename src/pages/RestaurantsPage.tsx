@@ -176,9 +176,9 @@ const RestaurantsPage = () => {
                   <Slider
                     value={[maxDeliveryFee]}
                     onValueChange={([v]) => setMaxDeliveryFee(v)}
-                    min={10}
-                    max={50}
-                    step={5}
+                    min={30}
+                    max={100}
+                    step={10}
                     className="mt-2"
                   />
                 </div>
