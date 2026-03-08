@@ -72,6 +72,8 @@ interface MenuItemCardProps {
   item: MenuItem;
   restaurantId: string;
   restaurantName: string;
+  isOpen?: boolean;
+  deliveryFee?: number;
 }
 
 const MenuItemCard = ({ item, restaurantId, restaurantName }: MenuItemCardProps) => {

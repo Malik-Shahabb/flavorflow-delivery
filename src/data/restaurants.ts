@@ -30,6 +30,7 @@ export interface CartItem {
   quantity: number;
   restaurantId: string;
   restaurantName: string;
+  deliveryFee?: number;
 }
 
 export interface Order {
