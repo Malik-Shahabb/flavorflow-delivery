@@ -42,6 +42,7 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <OnboardingTour />
               <Navbar />
               <Routes>
                 {/* Public routes */}
