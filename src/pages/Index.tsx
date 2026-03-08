@@ -47,7 +47,7 @@ const Index = () => {
       {/* Hero */}
       <section className="relative overflow-hidden px-4 py-20 md:py-28">
         <img src={heroImage} alt="Delicious food spread" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-foreground/60" />
+        <div className="absolute inset-0 bg-black/60" />
         <div className="container relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
