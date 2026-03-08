@@ -20,6 +20,8 @@ const DeliveryDashboardPage = () => {
   const { user } = useAuth();
   const [orders, setOrders] = useState<DeliveryOrder[]>([]);
   const [deliveredOrders, setDeliveredOrders] = useState<DeliveryOrder[]>([]);
+  const [pickedDemoOrders, setPickedDemoOrders] = useState<DeliveryOrder[]>([]);
+  const [deliveredDemoOrders, setDeliveredDemoOrders] = useState<DeliveryOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [isOnline, setIsOnline] = useState(true);
 
