@@ -1,0 +1,1 @@
+UPDATE restaurants SET is_approved = true WHERE id = '51471bc6-e564-4583-b5c4-492153b3af2d';
