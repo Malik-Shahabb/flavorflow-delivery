@@ -97,6 +97,8 @@ const LoginPage = () => {
           password,
         });
         if (error) throw error;
+        // Set the active role for this session
+        setActiveRole(selectedRole);
         toast.success("Logged in successfully!");
         if (selectedRole === "owner") navigate("/owner-dashboard");
         else if (selectedRole === "delivery") navigate("/delivery-dashboard");
