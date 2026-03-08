@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -25,6 +25,7 @@ interface DbOrder {
 
 const OrdersPage = () => {
   const { user } = useAuth();
+  const { orders: localOrders } = useCart();
   const [dbOrders, setDbOrders] = useState<DbOrder[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -76,41 +77,7 @@ const OrdersPage = () => {
     };
   }, [user]);
 
-  // Poll the advance-order-status function every 30 seconds for DB orders
-  useEffect(() => {
-    if (!user) return;
-    const hasActiveDbOrders = dbOrders.some((o) => o.status !== "delivered");
-    if (!hasActiveDbOrders && dbOrders.length > 0) return;
-
-    const interval = setInterval(async () => {
-      try {
-        await supabase.functions.invoke("advance-order-status");
-      } catch (e) {
-        // silently ignore
-      }
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, [user, dbOrders]);
-
-  // Also include local-only orders from cart context
-  const { orders: localOrders, advanceLocalOrder } = useCart();
-
-  // Auto-advance local-only orders every 30 seconds
-  useEffect(() => {
-    const localActive = localOrders.filter((o) => !o.dbOrderId && o.status !== "delivered");
-    if (localActive.length === 0) return;
-
-    const interval = setInterval(() => {
-      localActive.forEach((o) => {
-        if (o.status !== "delivered") {
-          advanceLocalOrder(o.id);
-        }
-      });
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, [localOrders, advanceLocalOrder]);
+  // Order advancement now runs globally in CartContext
 
   // Merge: show DB orders + local orders that don't have a dbOrderId (static restaurant orders)
   const allOrders = [
