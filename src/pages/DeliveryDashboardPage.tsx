@@ -190,7 +190,7 @@ const DeliveryDashboardPage = () => {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-semibold text-foreground">₹{d.amount}</p>
-                  <p className="text-xs text-green-500">+₹{d.tip} tip</p>
+                  <p className="text-xs text-primary">+₹{d.tip} tip</p>
                 </div>
               </div>
             ))}
