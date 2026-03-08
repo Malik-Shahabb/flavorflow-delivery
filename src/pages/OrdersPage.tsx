@@ -76,11 +76,11 @@ const OrdersPage = () => {
     };
   }, [user]);
 
-  // Poll the advance-order-status function every 30 seconds
+  // Poll the advance-order-status function every 30 seconds for DB orders
   useEffect(() => {
     if (!user) return;
-    const hasActiveOrders = dbOrders.some((o) => o.status !== "delivered");
-    if (!hasActiveOrders && dbOrders.length > 0) return;
+    const hasActiveDbOrders = dbOrders.some((o) => o.status !== "delivered");
+    if (!hasActiveDbOrders && dbOrders.length > 0) return;
 
     const interval = setInterval(async () => {
       try {
@@ -94,7 +94,23 @@ const OrdersPage = () => {
   }, [user, dbOrders]);
 
   // Also include local-only orders from cart context
-  const { orders: localOrders } = useCart();
+  const { orders: localOrders, advanceLocalOrder } = useCart();
+
+  // Auto-advance local-only orders every 30 seconds
+  useEffect(() => {
+    const localActive = localOrders.filter((o) => !o.dbOrderId && o.status !== "delivered");
+    if (localActive.length === 0) return;
+
+    const interval = setInterval(() => {
+      localActive.forEach((o) => {
+        if (o.status !== "delivered") {
+          advanceLocalOrder(o.id);
+        }
+      });
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [localOrders, advanceLocalOrder]);
 
   // Merge: show DB orders + local orders that don't have a dbOrderId (static restaurant orders)
   const allOrders = [

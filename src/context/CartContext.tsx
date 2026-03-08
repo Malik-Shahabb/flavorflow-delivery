@@ -14,6 +14,7 @@ interface CartContextType {
   currentOrder: Order | null;
   placeOrder: (deliveryFee: number) => void;
   advanceOrderStatus: () => void;
+  advanceLocalOrder: (orderId: string) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -56,6 +57,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const totalItems = items.reduce((sum, ci) => sum + ci.quantity, 0);
   const subtotal = items.reduce((sum, ci) => sum + ci.menuItem.price * ci.quantity, 0);
 
+  // Helper: check if a string is a valid UUID
+  const isUuid = (s: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
+
   const placeOrder = useCallback(
     async (deliveryFee: number) => {
       const orderId = `ORD-${Date.now().toString(36).toUpperCase()}`;
@@ -76,12 +80,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setOrders((prev) => [order, ...prev]);
       setItems([]);
 
-      // Persist order and create notification in background
+      // Persist order in background
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
-        // Get user profile for customer name
+        // Only persist to DB if restaurant has a valid UUID (DB restaurant)
+        if (!isUuid(restaurantId)) {
+          console.log("Static restaurant order — skipping DB persistence");
+          return;
+        }
+
         const { data: profile } = await supabase
           .from("profiles")
           .select("full_name")
@@ -90,8 +99,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         const customerName = profile?.full_name || user.email || "Customer";
 
-        // Insert the order
-        const { data: dbOrder } = await supabase
+        const { data: dbOrder, error: orderError } = await supabase
           .from("orders")
           .insert({
             user_id: user.id,
@@ -111,7 +119,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
           .select("id")
           .single();
 
-        if (!dbOrder) return;
+        if (orderError || !dbOrder) {
+          console.error("Failed to insert order:", orderError);
+          return;
+        }
 
         // Update local order with DB-generated ID
         setOrders((prev) =>
@@ -156,11 +167,25 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   }, []);
 
+  const advanceLocalOrder = useCallback((orderId: string) => {
+    setOrders((prev) => {
+      const flow: Order["status"][] = ["confirmed", "preparing", "out-for-delivery", "delivered"];
+      return prev.map((o) => {
+        if (o.id !== orderId) return o;
+        const idx = flow.indexOf(o.status);
+        if (idx >= 0 && idx < flow.length - 1) {
+          return { ...o, status: flow[idx + 1] };
+        }
+        return o;
+      });
+    });
+  }, []);
+
   const currentOrder = orders.length > 0 ? orders[0] : null;
 
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, subtotal, orders, currentOrder, placeOrder, advanceOrderStatus }}
+      value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, subtotal, orders, currentOrder, placeOrder, advanceOrderStatus, advanceLocalOrder }}
     >
       {children}
     </CartContext.Provider>
