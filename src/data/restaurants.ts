@@ -93,7 +93,7 @@ export const restaurants: Restaurant[] = [
     rating: 4.8,
     reviewCount: 215,
     deliveryTime: "35-45 min",
-    deliveryFee: 20,
+    deliveryFee: 30,
     minOrder: 200,
     image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&h=400&fit=crop",
     address: "789 Spice Lane",
