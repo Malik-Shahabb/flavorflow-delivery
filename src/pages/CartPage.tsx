@@ -9,13 +9,8 @@ const CartPage = () => {
 
   if (items.length === 0) {
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
-        <ShoppingBag className="h-16 w-16 text-muted-foreground/40" />
-        <h2 className="mt-4 font-serif text-2xl text-foreground">Your cart is empty</h2>
-        <p className="mt-2 text-muted-foreground">Add items from a restaurant to get started</p>
-        <Link to="/restaurants">
-          <Button className="mt-6 rounded-full" size="lg">Browse Restaurants</Button>
-        </Link>
+      <div className="min-h-screen pb-16">
+        <EmptyState type="cart" />
       </div>
     );
   }
