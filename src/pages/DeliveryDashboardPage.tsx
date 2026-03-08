@@ -14,6 +14,9 @@ interface DeliveryOrder {
   created_at: string;
   items: any;
   delivery_agent_id: string | null;
+  customer_name?: string;
+  customer_phone?: string;
+  customer_address?: string;
 }
 
 const DeliveryDashboardPage = () => {
@@ -117,6 +120,9 @@ const DeliveryDashboardPage = () => {
       created_at: new Date(Date.now() - 10 * 60000).toISOString(),
       items: [{ name: "Paneer Tikka", quantity: 2 }, { name: "Garlic Naan", quantity: 3 }],
       delivery_agent_id: null,
+      customer_name: "Amit Verma",
+      customer_phone: "+91 98765 12340",
+      customer_address: "B-12, Lajpat Nagar, New Delhi",
     },
     {
       id: "demo-002",
@@ -126,6 +132,9 @@ const DeliveryDashboardPage = () => {
       created_at: new Date(Date.now() - 5 * 60000).toISOString(),
       items: [{ name: "Chicken Biryani", quantity: 2 }, { name: "Raita", quantity: 2 }],
       delivery_agent_id: null,
+      customer_name: "Priya Sharma",
+      customer_phone: "+91 87654 32109",
+      customer_address: "42, Connaught Place, Block A, New Delhi",
     },
     {
       id: "demo-003",
@@ -135,6 +144,9 @@ const DeliveryDashboardPage = () => {
       created_at: new Date(Date.now() - 15 * 60000).toISOString(),
       items: [{ name: "Masala Dosa", quantity: 1 }, { name: "Filter Coffee", quantity: 2 }],
       delivery_agent_id: null,
+      customer_name: "Rahul Singh",
+      customer_phone: "+91 99887 76655",
+      customer_address: "15, Saket, J Block, New Delhi",
     },
   ];
 
@@ -227,9 +239,12 @@ const DeliveryDashboardPage = () => {
                       <p className="text-xs text-muted-foreground mt-1">
                         Order #{order.id.slice(0, 8)} • {new Date(order.created_at).toLocaleTimeString()}
                       </p>
-                      <div className="mt-2 flex items-center gap-4 text-sm text-muted-foreground">
-                        <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> Customer Address</span>
-                        <span className="flex items-center gap-1"><Phone className="h-3.5 w-3.5" /> Contact</span>
+                      {order.customer_name && (
+                        <p className="mt-2 text-sm font-medium text-foreground">👤 {order.customer_name}</p>
+                      )}
+                      <div className="mt-1 flex flex-col gap-1 text-sm text-muted-foreground">
+                        <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5 text-primary" /> {order.customer_address || "Address not available"}</span>
+                        <span className="flex items-center gap-1"><Phone className="h-3.5 w-3.5 text-primary" /> {order.customer_phone || "Phone not available"}</span>
                       </div>
                       {Array.isArray(order.items) && (
                         <p className="mt-2 text-xs text-muted-foreground">
