@@ -188,6 +188,7 @@ export type Database = {
           delivery_time: string
           id: string
           image: string
+          is_approved: boolean
           is_open: boolean
           min_order: number
           name: string
@@ -204,6 +205,7 @@ export type Database = {
           delivery_time?: string
           id?: string
           image?: string
+          is_approved?: boolean
           is_open?: boolean
           min_order?: number
           name: string
@@ -220,6 +222,7 @@ export type Database = {
           delivery_time?: string
           id?: string
           image?: string
+          is_approved?: boolean
           is_open?: boolean
           min_order?: number
           name?: string
