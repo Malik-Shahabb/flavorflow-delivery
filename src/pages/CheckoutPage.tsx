@@ -56,7 +56,7 @@ const CheckoutPage = () => {
                 </div>
                 <div>
                   <Label>ZIP Code</Label>
-                  <Input required placeholder="10001" className="mt-1" />
+                  <Input required placeholder="110001" className="mt-1" />
                 </div>
               </div>
             </div>
