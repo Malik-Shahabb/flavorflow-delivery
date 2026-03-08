@@ -61,7 +61,8 @@ const RestaurantsPage = () => {
       const matchRating = r.rating >= minRating;
       const matchVeg = !showVegOnly || r.menu.some((m) => m.isVeg);
       const matchPrice = r.menu.length === 0 || r.menu.some((m) => m.price <= maxPrice);
-      return matchSearch && matchCuisine && matchOpen && matchRating && matchVeg && matchPrice;
+      const matchDeliveryFee = r.deliveryFee <= maxDeliveryFee;
+      return matchSearch && matchCuisine && matchOpen && matchRating && matchVeg && matchPrice && matchDeliveryFee;
     });
 
     if (sortBy === "rating") results.sort((a, b) => b.rating - a.rating);
@@ -73,7 +74,7 @@ const RestaurantsPage = () => {
     });
 
     return results;
-  }, [search, activeCuisine, showOpenOnly, showVegOnly, minRating, maxPrice, sortBy, allRestaurants]);
+  }, [search, activeCuisine, showOpenOnly, showVegOnly, minRating, maxPrice, maxDeliveryFee, sortBy, allRestaurants]);
 
   return (
     <div className="min-h-screen pb-16">
