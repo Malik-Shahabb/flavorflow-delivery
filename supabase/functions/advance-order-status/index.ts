@@ -9,17 +9,21 @@ const statusFlow = ["confirmed", "preparing", "out-for-delivery", "delivered"];
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response('ok', { headers: corsHeaders });
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   const supabase = createClient(supabaseUrl, serviceRoleKey);
 
+  // Only get non-delivered orders where status hasn't changed in the last 30 seconds
+  const thirtySecondsAgo = new Date(Date.now() - 30000).toISOString();
+
   const { data: orders, error } = await supabase
     .from("orders")
     .select("id, status")
-    .neq("status", "delivered");
+    .neq("status", "delivered")
+    .lt("status_updated_at", thirtySecondsAgo);
 
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), {
@@ -35,7 +39,7 @@ Deno.serve(async (req) => {
       const nextStatus = statusFlow[currentIdx + 1];
       await supabase
         .from("orders")
-        .update({ status: nextStatus })
+        .update({ status: nextStatus, status_updated_at: new Date().toISOString() })
         .eq("id", order.id);
       updated++;
     }
