@@ -57,12 +57,12 @@ export const restaurants: Restaurant[] = [
     isOpen: true,
     tags: ["Popular", "Free delivery over ₹500"],
     menu: [
-      { id: "1-1", name: "Kung Pao Chicken", description: "Spicy stir-fried chicken with peanuts, vegetables, and chili peppers", price: 140, image: "https://images.unsplash.com/photo-1525755662778-989d0524087e?w=300&h=200&fit=crop", category: "Mains", isVeg: false, isPopular: true },
-      { id: "1-2", name: "Vegetable Spring Rolls", description: "Crispy rolls filled with mixed vegetables", price: 100, image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=300&h=200&fit=crop", category: "Starters", isVeg: true, isPopular: true },
-      { id: "1-3", name: "Fried Rice", description: "Wok-tossed rice with eggs, vegetables, and soy sauce", price: 120, image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=300&h=200&fit=crop", category: "Mains", isVeg: true },
-      { id: "1-4", name: "Hot & Sour Soup", description: "Traditional spicy and tangy soup with tofu and mushrooms", price: 100, image: "https://images.unsplash.com/photo-1547592166-23ac45744aec?w=300&h=200&fit=crop", category: "Starters", isVeg: true },
-      { id: "1-5", name: "Crispy Honey Chicken", description: "Deep-fried chicken tossed in sweet honey glaze", price: 150, image: "https://images.unsplash.com/photo-1562967914-608f82629710?w=300&h=200&fit=crop", category: "Mains", isVeg: false },
-      { id: "1-6", name: "Mango Pudding", description: "Silky smooth mango flavored dessert", price: 100, image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&h=200&fit=crop", category: "Desserts", isVeg: true },
+      { id: "1-1", name: "Kung Pao Chicken", description: "Spicy stir-fried chicken with peanuts, vegetables, and chili peppers", price: 420, image: "https://images.unsplash.com/photo-1525755662778-989d0524087e?w=300&h=200&fit=crop", category: "Mains", isVeg: false, isPopular: true },
+      { id: "1-2", name: "Vegetable Spring Rolls", description: "Crispy rolls filled with mixed vegetables", price: 280, image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=300&h=200&fit=crop", category: "Starters", isVeg: true, isPopular: true },
+      { id: "1-3", name: "Fried Rice", description: "Wok-tossed rice with eggs, vegetables, and soy sauce", price: 320, image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=300&h=200&fit=crop", category: "Mains", isVeg: true },
+      { id: "1-4", name: "Hot & Sour Soup", description: "Traditional spicy and tangy soup with tofu and mushrooms", price: 250, image: "https://images.unsplash.com/photo-1547592166-23ac45744aec?w=300&h=200&fit=crop", category: "Starters", isVeg: true },
+      { id: "1-5", name: "Crispy Honey Chicken", description: "Deep-fried chicken tossed in sweet honey glaze", price: 450, image: "https://images.unsplash.com/photo-1562967914-608f82629710?w=300&h=200&fit=crop", category: "Mains", isVeg: false },
+      { id: "1-6", name: "Mango Pudding", description: "Silky smooth mango flavored dessert", price: 220, image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&h=200&fit=crop", category: "Desserts", isVeg: true },
     ],
   },
   {
