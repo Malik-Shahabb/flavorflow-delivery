@@ -167,11 +167,25 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   }, []);
 
+  const advanceLocalOrder = useCallback((orderId: string) => {
+    setOrders((prev) => {
+      const flow: Order["status"][] = ["confirmed", "preparing", "out-for-delivery", "delivered"];
+      return prev.map((o) => {
+        if (o.id !== orderId) return o;
+        const idx = flow.indexOf(o.status);
+        if (idx >= 0 && idx < flow.length - 1) {
+          return { ...o, status: flow[idx + 1] };
+        }
+        return o;
+      });
+    });
+  }, []);
+
   const currentOrder = orders.length > 0 ? orders[0] : null;
 
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, subtotal, orders, currentOrder, placeOrder, advanceOrderStatus }}
+      value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, subtotal, orders, currentOrder, placeOrder, advanceOrderStatus, advanceLocalOrder }}
     >
       {children}
     </CartContext.Provider>
