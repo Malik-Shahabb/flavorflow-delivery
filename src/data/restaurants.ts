@@ -79,11 +79,11 @@ export const restaurants: Restaurant[] = [
     isOpen: true,
     tags: ["Top Rated"],
     menu: [
-      { id: "2-1", name: "Margherita Pizza", description: "Classic pizza with fresh mozzarella, tomatoes, and basil", price: 130, image: "https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=300&h=200&fit=crop", category: "Pizza", isVeg: true, isPopular: true },
-      { id: "2-2", name: "Spaghetti Carbonara", description: "Creamy pasta with pancetta, eggs, and parmesan", price: 150, image: "https://images.unsplash.com/photo-1612874742237-6526221588e3?w=300&h=200&fit=crop", category: "Pasta", isVeg: false, isPopular: true },
-      { id: "2-3", name: "Bruschetta", description: "Toasted bread topped with tomatoes, garlic, and fresh basil", price: 110, image: "https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?w=300&h=200&fit=crop", category: "Starters", isVeg: true },
-      { id: "2-4", name: "Tiramisu", description: "Classic Italian coffee-flavored layered dessert", price: 120, image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=300&h=200&fit=crop", category: "Desserts", isVeg: true },
-      { id: "2-5", name: "Pepperoni Pizza", description: "Loaded with spicy pepperoni and mozzarella cheese", price: 150, image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=300&h=200&fit=crop", category: "Pizza", isVeg: false },
+      { id: "2-1", name: "Margherita Pizza", description: "Classic pizza with fresh mozzarella, tomatoes, and basil", price: 380, image: "https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=300&h=200&fit=crop", category: "Pizza", isVeg: true, isPopular: true },
+      { id: "2-2", name: "Spaghetti Carbonara", description: "Creamy pasta with pancetta, eggs, and parmesan", price: 450, image: "https://images.unsplash.com/photo-1612874742237-6526221588e3?w=300&h=200&fit=crop", category: "Pasta", isVeg: false, isPopular: true },
+      { id: "2-3", name: "Bruschetta", description: "Toasted bread topped with tomatoes, garlic, and fresh basil", price: 290, image: "https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?w=300&h=200&fit=crop", category: "Starters", isVeg: true },
+      { id: "2-4", name: "Tiramisu", description: "Classic Italian coffee-flavored layered dessert", price: 310, image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=300&h=200&fit=crop", category: "Desserts", isVeg: true },
+      { id: "2-5", name: "Pepperoni Pizza", description: "Loaded with spicy pepperoni and mozzarella cheese", price: 430, image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=300&h=200&fit=crop", category: "Pizza", isVeg: false },
     ],
   },
   {
