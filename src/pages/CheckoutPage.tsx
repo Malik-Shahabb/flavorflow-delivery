@@ -79,29 +79,6 @@ const CheckoutPage = () => {
             </div>
           </div>
 
-          {/* Payment */}
-          <div className="rounded-lg border border-border bg-card p-6">
-            <h3 className="flex items-center gap-2 font-serif text-lg text-card-foreground">
-              <CreditCard className="h-5 w-5 text-primary" /> Payment
-            </h3>
-            <div className="mt-4 grid gap-4">
-              <div>
-                <Label>Card Number</Label>
-                <Input required placeholder="4242 4242 4242 4242" className="mt-1" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Expiry</Label>
-                  <Input required placeholder="MM/YY" className="mt-1" />
-                </div>
-                <div>
-                  <Label>CVV</Label>
-                  <Input required placeholder="123" className="mt-1" />
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* Summary */}
           <div className="rounded-lg border border-border bg-card p-6">
             <div className="space-y-2 text-sm">
