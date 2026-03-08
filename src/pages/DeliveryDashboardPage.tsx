@@ -57,6 +57,10 @@ const DeliveryDashboardPage = () => {
 
   const handlePickup = async (orderId: string) => {
     if (!user) return;
+    if (orderId.startsWith("demo-")) {
+      toast.success("Demo order picked up! In a real scenario, this would assign you.");
+      return;
+    }
     const { error } = await supabase
       .from("orders")
       .update({
