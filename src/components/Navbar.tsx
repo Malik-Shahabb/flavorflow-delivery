@@ -83,6 +83,9 @@ const Navbar = () => {
                 <DropdownMenuItem onClick={() => navigate("/restaurants")} className="gap-2 cursor-pointer">
                   <Search className="h-4 w-4" /> Search Restaurants
                 </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/orders")} className="gap-2 cursor-pointer">
+                  <ClipboardList className="h-4 w-4" /> My Orders
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => navigate("/owner-dashboard")} className="gap-2 cursor-pointer">
                   <Store className="h-4 w-4" /> Owner Dashboard
