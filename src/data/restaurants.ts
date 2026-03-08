@@ -142,11 +142,11 @@ export const restaurants: Restaurant[] = [
     isOpen: true,
     tags: ["Fast Delivery", "Budget Friendly"],
     menu: [
-      { id: "5-1", name: "Classic Smash Burger", description: "Double patty with cheese, lettuce, tomato, and special sauce", price: 130, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&h=200&fit=crop", category: "Burgers", isVeg: false, isPopular: true },
-      { id: "5-2", name: "Loaded Fries", description: "Crispy fries topped with cheese, bacon, and jalapeños", price: 110, image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=300&h=200&fit=crop", category: "Sides", isVeg: false },
-      { id: "5-3", name: "Veggie Burger", description: "Plant-based patty with avocado and grilled veggies", price: 120, image: "https://images.unsplash.com/photo-1520072959219-c595dc870360?w=300&h=200&fit=crop", category: "Burgers", isVeg: true },
-      { id: "5-4", name: "Milkshake", description: "Thick and creamy vanilla or chocolate shake", price: 100, image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=300&h=200&fit=crop", category: "Drinks", isVeg: true },
-      { id: "5-5", name: "Onion Rings", description: "Crispy battered onion rings with dipping sauce", price: 100, image: "https://images.unsplash.com/photo-1639024471283-03518883512d?w=300&h=200&fit=crop", category: "Sides", isVeg: true },
+      { id: "5-1", name: "Classic Smash Burger", description: "Double patty with cheese, lettuce, tomato, and special sauce", price: 350, image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&h=200&fit=crop", category: "Burgers", isVeg: false, isPopular: true },
+      { id: "5-2", name: "Loaded Fries", description: "Crispy fries topped with cheese, bacon, and jalapeños", price: 280, image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=300&h=200&fit=crop", category: "Sides", isVeg: false },
+      { id: "5-3", name: "Veggie Burger", description: "Plant-based patty with avocado and grilled veggies", price: 320, image: "https://images.unsplash.com/photo-1520072959219-c595dc870360?w=300&h=200&fit=crop", category: "Burgers", isVeg: true },
+      { id: "5-4", name: "Milkshake", description: "Thick and creamy vanilla or chocolate shake", price: 220, image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=300&h=200&fit=crop", category: "Drinks", isVeg: true },
+      { id: "5-5", name: "Onion Rings", description: "Crispy battered onion rings with dipping sauce", price: 200, image: "https://images.unsplash.com/photo-1639024471283-03518883512d?w=300&h=200&fit=crop", category: "Sides", isVeg: true },
     ],
   },
   {
