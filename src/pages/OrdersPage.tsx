@@ -76,6 +76,23 @@ const OrdersPage = () => {
     };
   }, [user]);
 
+  // Poll the advance-order-status function every 30 seconds
+  useEffect(() => {
+    if (!user) return;
+    const hasActiveOrders = dbOrders.some((o) => o.status !== "delivered");
+    if (!hasActiveOrders && dbOrders.length > 0) return;
+
+    const interval = setInterval(async () => {
+      try {
+        await supabase.functions.invoke("advance-order-status");
+      } catch (e) {
+        // silently ignore
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [user, dbOrders]);
+
   // Also include local-only orders from cart context
   const { orders: localOrders } = useCart();
 
