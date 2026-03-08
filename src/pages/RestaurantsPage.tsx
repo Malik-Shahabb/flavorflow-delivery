@@ -1,8 +1,9 @@
 import { useState, useMemo } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search, SlidersHorizontal, Star, Leaf } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Slider } from "@/components/ui/slider";
 import RestaurantCard from "@/components/RestaurantCard";
 import { restaurants as staticRestaurants, Restaurant } from "@/data/restaurants";
 import { useRestaurants } from "@/hooks/useRestaurants";
@@ -13,6 +14,11 @@ const RestaurantsPage = () => {
   const [search, setSearch] = useState("");
   const [activeCuisine, setActiveCuisine] = useState("All");
   const [showOpenOnly, setShowOpenOnly] = useState(false);
+  const [showVegOnly, setShowVegOnly] = useState(false);
+  const [minRating, setMinRating] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(200);
+  const [showFilters, setShowFilters] = useState(false);
+  const [sortBy, setSortBy] = useState<"default" | "rating" | "delivery" | "price">("default");
   const { data: dbRestaurants } = useRestaurants();
 
   const allRestaurants: Restaurant[] = useMemo(() => {
@@ -44,16 +50,29 @@ const RestaurantsPage = () => {
   }, [dbRestaurants]);
 
   const filtered = useMemo(() => {
-    return allRestaurants.filter((r) => {
+    let results = allRestaurants.filter((r) => {
       const matchSearch =
         r.name.toLowerCase().includes(search.toLowerCase()) ||
         r.cuisine.toLowerCase().includes(search.toLowerCase());
       const matchCuisine =
         activeCuisine === "All" || r.cuisine.toLowerCase().includes(activeCuisine.toLowerCase());
       const matchOpen = !showOpenOnly || r.isOpen;
-      return matchSearch && matchCuisine && matchOpen;
+      const matchRating = r.rating >= minRating;
+      const matchVeg = !showVegOnly || r.menu.some((m) => m.isVeg);
+      const matchPrice = r.menu.length === 0 || r.menu.some((m) => m.price <= maxPrice);
+      return matchSearch && matchCuisine && matchOpen && matchRating && matchVeg && matchPrice;
     });
-  }, [search, activeCuisine, showOpenOnly, allRestaurants]);
+
+    if (sortBy === "rating") results.sort((a, b) => b.rating - a.rating);
+    else if (sortBy === "delivery") results.sort((a, b) => a.deliveryFee - b.deliveryFee);
+    else if (sortBy === "price") results.sort((a, b) => {
+      const avgA = a.menu.length > 0 ? a.menu.reduce((s, m) => s + m.price, 0) / a.menu.length : 0;
+      const avgB = b.menu.length > 0 ? b.menu.reduce((s, m) => s + m.price, 0) / b.menu.length : 0;
+      return avgA - avgB;
+    });
+
+    return results;
+  }, [search, activeCuisine, showOpenOnly, showVegOnly, minRating, maxPrice, sortBy, allRestaurants]);
 
   return (
     <div className="min-h-screen pb-16">
@@ -70,16 +89,34 @@ const RestaurantsPage = () => {
                 className="pl-10"
               />
             </div>
-            <Button
-              variant={showOpenOnly ? "default" : "outline"}
-              size="sm"
-              className="gap-2"
-              onClick={() => setShowOpenOnly(!showOpenOnly)}
-            >
-              <SlidersHorizontal className="h-4 w-4" />
-              Open Now
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                variant={showOpenOnly ? "default" : "outline"}
+                size="sm"
+                onClick={() => setShowOpenOnly(!showOpenOnly)}
+              >
+                Open Now
+              </Button>
+              <Button
+                variant={showVegOnly ? "default" : "outline"}
+                size="sm"
+                className="gap-1.5"
+                onClick={() => setShowVegOnly(!showVegOnly)}
+              >
+                <Leaf className="h-4 w-4" /> Veg Only
+              </Button>
+              <Button
+                variant={showFilters ? "default" : "outline"}
+                size="sm"
+                className="gap-1.5"
+                onClick={() => setShowFilters(!showFilters)}
+              >
+                <SlidersHorizontal className="h-4 w-4" /> Filters
+              </Button>
+            </div>
           </div>
+
+          {/* Cuisine chips */}
           <div className="mt-4 flex flex-wrap gap-2">
             {cuisineFilters.map((c) => (
               <Badge
@@ -92,9 +129,69 @@ const RestaurantsPage = () => {
               </Badge>
             ))}
           </div>
+
+          {/* Advanced Filters */}
+          {showFilters && (
+            <div className="mt-4 rounded-lg border border-border bg-background p-4 space-y-4">
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-2 block">
+                    Minimum Rating: {minRating > 0 ? `${minRating}+` : "Any"}
+                  </label>
+                  <div className="flex gap-1">
+                    {[0, 3, 3.5, 4, 4.5].map((r) => (
+                      <button
+                        key={r}
+                        onClick={() => setMinRating(r)}
+                        className={`flex items-center gap-0.5 rounded-full px-2.5 py-1 text-xs transition-colors ${
+                          minRating === r
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted text-muted-foreground hover:bg-muted/80"
+                        }`}
+                      >
+                        {r === 0 ? "Any" : <><Star className="h-3 w-3 fill-current" />{r}+</>}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-2 block">
+                    Max Price: ₹{maxPrice}
+                  </label>
+                  <Slider
+                    value={[maxPrice]}
+                    onValueChange={([v]) => setMaxPrice(v)}
+                    min={50}
+                    max={200}
+                    step={10}
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground mb-2 block">Sort By</label>
+                  <div className="flex flex-wrap gap-1">
+                    {([["default", "Relevance"], ["rating", "Rating"], ["delivery", "Delivery Fee"], ["price", "Price"]] as const).map(([key, label]) => (
+                      <button
+                        key={key}
+                        onClick={() => setSortBy(key)}
+                        className={`rounded-full px-2.5 py-1 text-xs transition-colors ${
+                          sortBy === key
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted text-muted-foreground hover:bg-muted/80"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <div className="container mt-8">
+        <p className="mb-4 text-sm text-muted-foreground">{filtered.length} restaurant{filtered.length !== 1 ? "s" : ""} found</p>
         {filtered.length === 0 ? (
           <div className="py-20 text-center">
             <p className="text-lg text-muted-foreground">No restaurants found matching your criteria.</p>

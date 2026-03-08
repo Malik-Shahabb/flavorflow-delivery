@@ -3,7 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useRestaurants } from "@/hooks/useRestaurants";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Settings, ShoppingBag, Store, ArrowLeft } from "lucide-react";
+import { Plus, Settings, ShoppingBag, Store, ArrowLeft, BarChart3 } from "lucide-react";
 import { useMemo } from "react";
 
 const OwnerDashboardPage = () => {
@@ -90,6 +90,11 @@ const OwnerDashboardPage = () => {
                     <Link to={`/owner-orders/${r.id}`}>
                       <Button variant="outline" size="sm" className="gap-1.5">
                         <ShoppingBag className="h-4 w-4" /> View Orders
+                      </Button>
+                    </Link>
+                    <Link to={`/analytics/${r.id}`}>
+                      <Button variant="outline" size="sm" className="gap-1.5">
+                        <BarChart3 className="h-4 w-4" /> Analytics
                       </Button>
                     </Link>
                     <Link to={`/restaurant/${r.id}`}>
