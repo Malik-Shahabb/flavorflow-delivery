@@ -151,7 +151,7 @@ const RestaurantDetailPage = () => {
                 {restaurant.menu
                   .filter((m) => m.category === cat)
                   .map((item) => (
-                    <MenuItemCard key={item.id} item={item} restaurantId={restaurant.id} restaurantName={restaurant.name} isOpen={restaurant.isOpen} deliveryFee={restaurant.deliveryFee} />
+                    <MenuItemCard key={item.id} item={item} restaurantId={restaurant.id} restaurantName={restaurant.name} isOpen={restaurant.isOpen} deliveryFee={restaurant.deliveryFee} minOrder={restaurant.minOrder} />
                   ))}
               </div>
             </div>
