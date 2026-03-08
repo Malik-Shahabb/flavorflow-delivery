@@ -96,11 +96,15 @@ const OrdersPage = () => {
                 {order.status === "delivered" && (
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-semibold text-success">🎉 Delivered!</p>
-                    <ReviewDialog
-                      orderId={order.id}
-                      restaurantId={order.items[0]?.restaurantId || ""}
-                      restaurantName={order.restaurantName}
-                    />
+                    {order.dbOrderId ? (
+                      <ReviewDialog
+                        orderId={order.dbOrderId}
+                        restaurantId={order.items[0]?.restaurantId || ""}
+                        restaurantName={order.restaurantName}
+                      />
+                    ) : (
+                      <p className="text-xs text-muted-foreground">Review unavailable for this order</p>
+                    )}
                   </div>
                 )}
               </div>
