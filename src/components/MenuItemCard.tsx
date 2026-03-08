@@ -76,7 +76,7 @@ interface MenuItemCardProps {
   deliveryFee?: number;
 }
 
-const MenuItemCard = ({ item, restaurantId, restaurantName }: MenuItemCardProps) => {
+const MenuItemCard = ({ item, restaurantId, restaurantName, isOpen = true, deliveryFee }: MenuItemCardProps) => {
   const { items, addItem, updateQuantity } = useCart();
   const cartItem = items.find((ci) => ci.menuItem.id === item.id);
   const reviewData = getItemReviewData(item.name);
