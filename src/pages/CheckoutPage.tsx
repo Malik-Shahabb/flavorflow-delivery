@@ -22,12 +22,7 @@ const CheckoutPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setTimeout(() => {
-      placeOrder(deliveryFee);
-      toast.success("Order placed successfully!");
-      navigate("/orders");
-    }, 1500);
+    navigate("/payment");
   };
 
   return (
