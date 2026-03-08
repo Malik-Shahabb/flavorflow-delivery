@@ -1,13 +1,14 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Star, Clock, Truck, MapPin, Settings } from "lucide-react";
+import { ArrowLeft, Star, Clock, Truck, MapPin, Settings, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import MenuItemCard from "@/components/MenuItemCard";
 import { restaurants as staticRestaurants, Restaurant, MenuItem } from "@/data/restaurants";
 import { useCart } from "@/context/CartContext";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useRestaurant } from "@/hooks/useRestaurants";
 import { useAuth } from "@/context/AuthContext";
+import ReviewsList from "@/components/ReviewsList";
 
 const RestaurantDetailPage = () => {
   const { id } = useParams();
@@ -15,8 +16,8 @@ const RestaurantDetailPage = () => {
   const { user } = useAuth();
   const { data: dbRestaurant, isLoading } = useRestaurant(id);
   const isOwner = user && dbRestaurant && dbRestaurant.owner_id === user.id;
+  const [showReviews, setShowReviews] = useState(false);
 
-  // Try static data first, then DB
   const restaurant: Restaurant | null = useMemo(() => {
     const staticMatch = staticRestaurants.find((r) => r.id === id);
     if (staticMatch) return staticMatch;
@@ -108,15 +109,35 @@ const RestaurantDetailPage = () => {
             <span className="flex items-center gap-1"><MapPin className="h-4 w-4" />{restaurant.address}</span>
           </div>
           <p className="mt-2 text-xs text-muted-foreground">Minimum order: ₹{restaurant.minOrder.toFixed(2)}</p>
-          {isOwner && (
-            <Link to={`/manage-restaurant/${restaurant.id}`}>
-              <Button variant="outline" size="sm" className="mt-3 gap-1.5">
-                <Settings className="h-4 w-4" /> Manage Menu
-              </Button>
-            </Link>
-          )}
+          <div className="mt-3 flex flex-wrap gap-2">
+            {isOwner && (
+              <Link to={`/manage-restaurant/${restaurant.id}`}>
+                <Button variant="outline" size="sm" className="gap-1.5">
+                  <Settings className="h-4 w-4" /> Manage Menu
+                </Button>
+              </Link>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5"
+              onClick={() => setShowReviews(!showReviews)}
+            >
+              <MessageSquare className="h-4 w-4" /> {showReviews ? "Hide Reviews" : "View Reviews"}
+            </Button>
+          </div>
         </div>
       </div>
+
+      {/* Reviews Section */}
+      {showReviews && (
+        <div className="container mt-6">
+          <div className="rounded-xl border border-border bg-card p-6">
+            <h2 className="font-serif text-xl text-card-foreground mb-4">Customer Reviews</h2>
+            <ReviewsList restaurantId={restaurant.id} />
+          </div>
+        </div>
+      )}
 
       {/* Menu */}
       <div className="container mt-8">

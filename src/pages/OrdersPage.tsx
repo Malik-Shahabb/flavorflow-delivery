@@ -2,6 +2,7 @@ import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Package, ChefHat, Truck, CheckCircle2, ArrowRight } from "lucide-react";
+import ReviewDialog from "@/components/ReviewDialog";
 
 const steps = [
   { status: "confirmed", label: "Order Confirmed", icon: Package },
@@ -46,7 +47,7 @@ const OrdersPage = () => {
                   </div>
                   <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
                     order.status === "delivered"
-                      ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                      ? "bg-success/10 text-success"
                       : "bg-primary/10 text-primary"
                   }`}>
                     {steps.find((s) => s.status === order.status)?.label}
@@ -93,7 +94,14 @@ const OrdersPage = () => {
                 )}
 
                 {order.status === "delivered" && (
-                  <p className="text-center text-sm font-semibold text-green-600">🎉 Delivered!</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-semibold text-success">🎉 Delivered!</p>
+                    <ReviewDialog
+                      orderId={order.id}
+                      restaurantId={order.items[0]?.restaurantId || ""}
+                      restaurantName={order.restaurantName}
+                    />
+                  </div>
                 )}
               </div>
             );
