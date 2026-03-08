@@ -167,7 +167,7 @@ const MenuItemCard = ({ item, restaurantId, restaurantName, isOpen = true, deliv
                 size="icon"
                 variant="ghost"
                 className="h-7 w-7 text-primary-foreground hover:bg-primary/80"
-                onClick={() => addItem(item, restaurantId, restaurantName, deliveryFee)}
+                onClick={() => addItem(item, restaurantId, restaurantName, deliveryFee, minOrder)}
               >
                 <Plus className="h-3.5 w-3.5" />
               </Button>
