@@ -111,6 +111,7 @@ export type Database = {
           restaurant_id: string
           restaurant_name: string
           status: string
+          status_updated_at: string
           subtotal: number
           total: number
           user_id: string
@@ -123,6 +124,7 @@ export type Database = {
           restaurant_id: string
           restaurant_name: string
           status?: string
+          status_updated_at?: string
           subtotal?: number
           total?: number
           user_id: string
@@ -135,6 +137,7 @@ export type Database = {
           restaurant_id?: string
           restaurant_name?: string
           status?: string
+          status_updated_at?: string
           subtotal?: number
           total?: number
           user_id?: string
