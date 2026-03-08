@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
-import { ShoppingCart, User, Search, LogOut, Store } from "lucide-react";
+import { ShoppingCart, User, Search, LogOut, Store, Moon, Sun } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/context/ThemeContext";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import NotificationBell from "@/components/NotificationBell";
@@ -10,6 +11,7 @@ import NotificationBell from "@/components/NotificationBell";
 const Navbar = () => {
   const { totalItems } = useCart();
   const { user, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -38,6 +40,15 @@ const Navbar = () => {
         </nav>
 
         <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground"
+            onClick={toggleTheme}
+            title={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+          >
+            {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+          </Button>
           <Link to="/restaurants">
             <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground hover:text-foreground">
               <Search className="h-4 w-4" />
