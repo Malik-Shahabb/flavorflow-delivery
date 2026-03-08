@@ -147,6 +147,9 @@ const Navbar = () => {
                 <Link to="/owner-dashboard" onClick={closeMobile} className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted flex items-center gap-2">
                   <Store className="h-4 w-4" /> Owner Dashboard
                 </Link>
+                <Link to="/delivery-dashboard" onClick={closeMobile} className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted flex items-center gap-2">
+                  <Bike className="h-4 w-4" /> Delivery Dashboard
+                </Link>
                 <Link to="/admin" onClick={closeMobile} className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground hover:bg-muted flex items-center gap-2">
                   <Shield className="h-4 w-4" /> Admin Panel
                 </Link>
