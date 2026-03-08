@@ -43,7 +43,7 @@ const CheckoutPage = () => {
             <div className="mt-4 grid gap-4">
               <div>
                 <Label>Full Name</Label>
-                <Input required placeholder="John Doe" className="mt-1" />
+                <Input required placeholder="Rahul Sharma" className="mt-1" />
               </div>
               <div>
                 <Label>Address</Label>
