@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Package, ChefHat, Truck, CheckCircle2, ArrowRight } from "lucide-react";
+import { Package, ChefHat, Truck, CheckCircle2 } from "lucide-react";
 import ReviewDialog from "@/components/ReviewDialog";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/context/AuthContext";
 
 const steps = [
   { status: "confirmed", label: "Order Confirmed", icon: Package },
@@ -11,10 +14,94 @@ const steps = [
   { status: "delivered", label: "Delivered", icon: CheckCircle2 },
 ] as const;
 
-const OrdersPage = () => {
-  const { orders, advanceOrderStatus } = useCart();
+interface DbOrder {
+  id: string;
+  status: string;
+  restaurant_name: string;
+  items: any;
+  total: number;
+  created_at: string;
+}
 
-  if (orders.length === 0) {
+const OrdersPage = () => {
+  const { user } = useAuth();
+  const [dbOrders, setDbOrders] = useState<DbOrder[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch orders from DB
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchOrders = async () => {
+      const { data } = await supabase
+        .from("orders")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+      setDbOrders((data as DbOrder[]) || []);
+      setLoading(false);
+    };
+
+    fetchOrders();
+
+    // Subscribe to realtime updates
+    const channel = supabase
+      .channel("user-orders")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "orders",
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          if (payload.eventType === "UPDATE") {
+            setDbOrders((prev) =>
+              prev.map((o) =>
+                o.id === (payload.new as DbOrder).id
+                  ? (payload.new as DbOrder)
+                  : o
+              )
+            );
+          } else if (payload.eventType === "INSERT") {
+            setDbOrders((prev) => [payload.new as DbOrder, ...prev]);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
+
+  // Also include local-only orders from cart context
+  const { orders: localOrders } = useCart();
+
+  // Merge: show DB orders + local orders that don't have a dbOrderId (static restaurant orders)
+  const allOrders = [
+    ...dbOrders.map((o) => ({
+      id: o.id,
+      dbOrderId: o.id,
+      status: o.status as "confirmed" | "preparing" | "out-for-delivery" | "delivered",
+      restaurantName: o.restaurant_name,
+      items: Array.isArray(o.items) ? o.items : [],
+      total: o.total,
+      createdAt: new Date(o.created_at),
+    })),
+    ...localOrders.filter((lo) => !lo.dbOrderId),
+  ];
+
+  if (loading) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-muted-foreground">Loading orders...</p>
+      </div>
+    );
+  }
+
+  if (allOrders.length === 0) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
         <Package className="h-16 w-16 text-muted-foreground/40" />
@@ -31,18 +118,19 @@ const OrdersPage = () => {
     <div className="min-h-screen pb-16">
       <div className="container max-w-2xl py-8">
         <h1 className="font-serif text-3xl text-foreground">My Orders</h1>
-        <p className="text-muted-foreground mt-1">{orders.length} order{orders.length > 1 ? "s" : ""}</p>
+        <p className="text-muted-foreground mt-1">{allOrders.length} order{allOrders.length > 1 ? "s" : ""}</p>
 
         <div className="mt-8 space-y-6">
-          {orders.map((order, orderIdx) => {
+          {allOrders.map((order) => {
             const currentIdx = steps.findIndex((s) => s.status === order.status);
-            const isLatest = orderIdx === 0;
 
             return (
               <div key={order.id} className="rounded-xl border border-border bg-card p-4 space-y-4 sm:p-6">
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <h3 className="font-serif text-base text-card-foreground sm:text-lg">Order #{order.id}</h3>
+                    <h3 className="font-serif text-base text-card-foreground sm:text-lg">
+                      Order #{order.id.slice(0, 8)}
+                    </h3>
                     <p className="text-sm text-muted-foreground">{order.restaurantName}</p>
                   </div>
                   <span className={`self-start text-xs font-semibold px-3 py-1 rounded-full ${
@@ -66,13 +154,13 @@ const OrdersPage = () => {
 
                 {/* Items */}
                 <div className="space-y-2">
-                  {order.items.map((ci) => (
-                    <div key={ci.menuItem.id} className="flex justify-between text-sm">
+                  {order.items.map((ci: any, idx: number) => (
+                    <div key={ci.menuItem?.id || idx} className="flex justify-between text-sm">
                       <span className="text-card-foreground">
-                        {ci.quantity}x {ci.menuItem.name}
+                        {ci.quantity}x {ci.menuItem?.name || "Item"}
                       </span>
                       <span className="text-muted-foreground">
-                        ₹{(ci.menuItem.price * ci.quantity).toFixed(2)}
+                        ₹{((ci.menuItem?.price || 0) * ci.quantity).toFixed(2)}
                       </span>
                     </div>
                   ))}
@@ -82,15 +170,11 @@ const OrdersPage = () => {
                   </div>
                 </div>
 
-                {/* Advance button for latest non-delivered order */}
-                {isLatest && order.status !== "delivered" && (
-                  <Button
-                    onClick={advanceOrderStatus}
-                    className="w-full rounded-full gap-2"
-                    variant="outline"
-                  >
-                    Simulate Next Status <ArrowRight className="h-4 w-4" />
-                  </Button>
+                {/* Auto-advancing notice for non-delivered */}
+                {order.status !== "delivered" && (
+                  <p className="text-xs text-muted-foreground text-center">
+                    Status updates automatically every 5 minutes
+                  </p>
                 )}
 
                 {order.status === "delivered" && (
@@ -103,7 +187,7 @@ const OrdersPage = () => {
                         restaurantName={order.restaurantName}
                       />
                     ) : (
-                      <p className="text-xs text-muted-foreground">Review unavailable for this order</p>
+                      <p className="text-xs text-muted-foreground">Review unavailable</p>
                     )}
                   </div>
                 )}
