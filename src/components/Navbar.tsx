@@ -11,6 +11,7 @@ import NotificationBell from "@/components/NotificationBell";
 const Navbar = () => {
   const { totalItems } = useCart();
   const { user, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
