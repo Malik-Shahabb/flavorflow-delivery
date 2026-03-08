@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCart } from "@/context/CartContext";
-import { restaurants } from "@/data/restaurants";
 import { toast } from "sonner";
 
 const CheckoutPage = () => {
@@ -13,8 +12,7 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const restaurant = restaurants.find((r) => r.id === items[0]?.restaurantId);
-  const deliveryFee = restaurant?.deliveryFee || 2.99;
+  const deliveryFee = items[0]?.deliveryFee ?? 2.99;
   const total = subtotal + deliveryFee;
 
   if (items.length === 0) {

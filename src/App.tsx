@@ -8,6 +8,7 @@ import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
 import RecentOrdersSummary from "@/components/RecentOrdersSummary";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import RestaurantsPage from "./pages/RestaurantsPage";
 import RestaurantDetailPage from "./pages/RestaurantDetailPage";
@@ -15,6 +16,7 @@ import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrdersPage from "./pages/OrdersPage";
 import LoginPage from "./pages/LoginPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import RegisterRestaurantPage from "./pages/RegisterRestaurantPage";
 import ManageRestaurantPage from "./pages/ManageRestaurantPage";
 import OwnerDashboardPage from "./pages/OwnerDashboardPage";
@@ -37,20 +39,25 @@ const App = () => (
             <BrowserRouter>
               <Navbar />
               <Routes>
+                {/* Public routes */}
                 <Route path="/" element={<Index />} />
                 <Route path="/restaurants" element={<RestaurantsPage />} />
                 <Route path="/restaurant/:id" element={<RestaurantDetailPage />} />
-                <Route path="/cart" element={<CartPage />} />
-                <Route path="/checkout" element={<CheckoutPage />} />
-                <Route path="/orders" element={<OrdersPage />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/register-restaurant" element={<RegisterRestaurantPage />} />
-                <Route path="/manage-restaurant/:id" element={<ManageRestaurantPage />} />
-                <Route path="/owner-dashboard" element={<OwnerDashboardPage />} />
-                <Route path="/owner-orders/:id" element={<OwnerOrdersPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/admin" element={<AdminDashboardPage />} />
-                <Route path="/analytics/:id" element={<RestaurantAnalyticsPage />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
+
+                {/* Protected routes */}
+                <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
+                <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+                <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
+                <Route path="/register-restaurant" element={<ProtectedRoute><RegisterRestaurantPage /></ProtectedRoute>} />
+                <Route path="/manage-restaurant/:id" element={<ProtectedRoute><ManageRestaurantPage /></ProtectedRoute>} />
+                <Route path="/owner-dashboard" element={<ProtectedRoute><OwnerDashboardPage /></ProtectedRoute>} />
+                <Route path="/owner-orders/:id" element={<ProtectedRoute><OwnerOrdersPage /></ProtectedRoute>} />
+                <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+                <Route path="/admin" element={<ProtectedRoute><AdminDashboardPage /></ProtectedRoute>} />
+                <Route path="/analytics/:id" element={<ProtectedRoute><RestaurantAnalyticsPage /></ProtectedRoute>} />
+
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <RecentOrdersSummary />
