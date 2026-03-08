@@ -15,6 +15,8 @@ import OrdersPage from "./pages/OrdersPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterRestaurantPage from "./pages/RegisterRestaurantPage";
 import ManageRestaurantPage from "./pages/ManageRestaurantPage";
+import OwnerDashboardPage from "./pages/OwnerDashboardPage";
+import OwnerOrdersPage from "./pages/OwnerOrdersPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
 
