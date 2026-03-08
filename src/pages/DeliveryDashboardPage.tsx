@@ -138,13 +138,16 @@ const DeliveryDashboardPage = () => {
     },
   ];
 
+  const pickedDemoIds = new Set(pickedDemoOrders.map((o) => o.id));
+  const deliveredDemoIds = new Set(deliveredDemoOrders.map((o) => o.id));
   const realAvailable = orders.filter((o) => (o.status === "preparing" || o.status === "confirmed") && !o.delivery_agent_id);
-  const availableOrders = realAvailable.length > 0 ? realAvailable : demoOrders;
+  const remainingDemos = demoOrders.filter((o) => !pickedDemoIds.has(o.id) && !deliveredDemoIds.has(o.id));
+  const availableOrders = [...realAvailable, ...remainingDemos];
 
-  const myActiveOrders = useMemo(() =>
-    orders.filter((o) => o.status === "out-for-delivery" && o.delivery_agent_id === user?.id),
-    [orders, user]
-  );
+  const realActive = orders.filter((o) => o.status === "out-for-delivery" && o.delivery_agent_id === user?.id);
+  const myActiveOrders = [...realActive, ...pickedDemoOrders];
+
+  const allDelivered = [...deliveredOrders, ...deliveredDemoOrders];
 
   const stats = {
     delivered: deliveredOrders.length,
