@@ -70,7 +70,7 @@ const CheckoutPage = () => {
             <div className="mt-4 grid gap-4">
               <div>
                 <Label>Phone</Label>
-                <Input required type="tel" placeholder="+1 (555) 000-0000" className="mt-1" />
+                <Input required type="tel" placeholder="+91 98765 43210" className="mt-1" />
               </div>
               <div>
                 <Label>Email</Label>

@@ -120,7 +120,7 @@ const ProfilePage = () => {
               type="tel"
               value={profile.phone}
               onChange={(e) => setProfile((p) => ({ ...p, phone: e.target.value }))}
-              placeholder="+1 (555) 000-0000"
+              placeholder="+91 98765 43210"
               className="mt-1"
             />
           </div>
