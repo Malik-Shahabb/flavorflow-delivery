@@ -89,7 +89,7 @@ const LoginPage = () => {
             vehicle_number: vehicleNumber,
           });
         }
-
+        setActiveRole(selectedRole);
         toast.success("Account created! Please check your email and verify before signing in.", { duration: 6000 });
       } else {
         const { error } = await supabase.auth.signInWithPassword({
