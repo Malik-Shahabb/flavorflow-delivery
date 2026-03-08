@@ -113,6 +113,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         if (!dbOrder) return;
 
+        // Update local order with DB-generated ID
+        setOrders((prev) =>
+          prev.map((o) =>
+            o.id === orderId ? { ...o, dbOrderId: dbOrder.id } : o
+          )
+        );
+
         // Find restaurant owner and create notification
         const { data: restaurant } = await supabase
           .from("restaurants")
