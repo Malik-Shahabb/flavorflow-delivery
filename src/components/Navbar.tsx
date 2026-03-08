@@ -109,8 +109,8 @@ const Navbar = () => {
 
         {/* Mobile actions */}
         <div className="flex items-center gap-1 md:hidden">
-          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground" onClick={toggleTheme}>
-            {theme === "light" ? <Moon className="h-4 w-4" /> : theme === "dark" ? <Sunset className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground" onClick={toggleTheme} title={theme === "light" ? "Dark mode" : theme === "dark" ? "Night Light" : "Light mode"}>
+            {theme === "light" ? <Moon className="h-4 w-4" /> : theme === "dark" ? <Sunset className="h-4 w-4 text-amber-400" /> : <Sun className="h-4 w-4 text-yellow-400" />}
           </Button>
           <Link to="/orders">
             <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full text-muted-foreground">
