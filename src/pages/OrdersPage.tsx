@@ -205,9 +205,12 @@ const OrdersPage = () => {
 
                 {/* Auto-advancing notice for non-delivered */}
                 {order.status !== "delivered" && (
-                  <p className="text-xs text-muted-foreground text-center">
-                    Status updates automatically every 30 seconds
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <div className="relative flex-1 h-1.5 rounded-full bg-muted overflow-hidden">
+                      <div className="absolute inset-0 h-full w-1/3 rounded-full bg-primary animate-[shimmer_1.5s_ease-in-out_infinite]" />
+                    </div>
+                    <span className="text-xs text-muted-foreground whitespace-nowrap">Updating…</span>
+                  </div>
                 )}
 
                 {order.status === "delivered" && (
