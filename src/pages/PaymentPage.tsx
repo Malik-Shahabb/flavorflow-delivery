@@ -151,11 +151,26 @@ const PaymentPage = () => {
                 />
               </div>
               <div className="flex gap-3 justify-center pt-2">
-                {["GPay", "PhonePe", "Paytm"].map((app) => (
-                  <div key={app} className="rounded-lg border border-border bg-background px-4 py-2 text-xs text-muted-foreground font-medium">
-                    {app}
-                  </div>
-                ))}
+                {["GPay", "PhonePe", "Paytm"].map((app) => {
+                  const upiHandles: Record<string, string> = { GPay: "okaxis", PhonePe: "ybl", Paytm: "paytm" };
+                  return (
+                    <button
+                      key={app}
+                      type="button"
+                      onClick={() => setUpiId((prev) => {
+                        const name = prev.split("@")[0] || "";
+                        return name ? `${name}@${upiHandles[app]}` : `@${upiHandles[app]}`;
+                      })}
+                      className={`rounded-lg border px-4 py-2 text-xs font-medium transition-all cursor-pointer ${
+                        upiId.endsWith(`@${upiHandles[app]}`)
+                          ? "border-primary bg-primary/10 text-primary"
+                          : "border-border bg-background text-muted-foreground hover:border-primary/50"
+                      }`}
+                    >
+                      {app}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
