@@ -8,8 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, ToggleLeft, ToggleRight } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import EditMenuItemDialog from "@/components/EditMenuItemDialog";
 
 interface NewMenuItem {
   name: string;
@@ -41,7 +42,27 @@ const ManageRestaurantPage = () => {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
   const [deletingRestaurant, setDeletingRestaurant] = useState(false);
+  const [togglingOpen, setTogglingOpen] = useState(false);
   const [newItems, setNewItems] = useState<NewMenuItem[]>([{ ...emptyItem }]);
+
+  const handleToggleOpen = async () => {
+    if (!restaurant) return;
+    setTogglingOpen(true);
+    try {
+      const { error } = await supabase
+        .from("restaurants")
+        .update({ is_open: !restaurant.is_open })
+        .eq("id", restaurant.id);
+      if (error) throw error;
+      toast.success(restaurant.is_open ? "Restaurant marked as Closed" : "Restaurant marked as Open");
+      queryClient.invalidateQueries({ queryKey: ["restaurant", id] });
+      queryClient.invalidateQueries({ queryKey: ["restaurants"] });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update status");
+    } finally {
+      setTogglingOpen(false);
+    }
+  };
 
   if (!isReady || isLoading) {
     return (
@@ -125,35 +146,47 @@ const ManageRestaurantPage = () => {
           <Link to={`/restaurant/${id}`} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
             <ArrowLeft className="h-4 w-4" /> Back to Restaurant
           </Link>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-3">
             <div>
               <h1 className="font-serif text-3xl text-foreground">Manage: {restaurant.name}</h1>
-              <p className="mt-1 text-muted-foreground">Add or remove menu items</p>
+              <p className="mt-1 text-muted-foreground">Add, edit, or remove menu items</p>
             </div>
-            <Button
-              variant="destructive"
-              size="sm"
-              className="gap-1.5"
-              disabled={deletingRestaurant}
-              onClick={async () => {
-                if (!confirm("Are you sure you want to delete this restaurant and all its menu items? This cannot be undone.")) return;
-                setDeletingRestaurant(true);
-                try {
-                  const { error: mErr } = await supabase.from("menu_items").delete().eq("restaurant_id", restaurant.id);
-                  if (mErr) throw mErr;
-                  const { error: rErr } = await supabase.from("restaurants").delete().eq("id", restaurant.id);
-                  if (rErr) throw rErr;
-                  toast.success("Restaurant deleted");
-                  queryClient.invalidateQueries({ queryKey: ["restaurants"] });
-                  navigate("/restaurants");
-                } catch (err: any) {
-                  toast.error(err.message || "Failed to delete restaurant");
-                  setDeletingRestaurant(false);
-                }
-              }}
-            >
-              <Trash2 className="h-4 w-4" /> {deletingRestaurant ? "Deleting..." : "Delete Restaurant"}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-1.5"
+                disabled={togglingOpen}
+                onClick={handleToggleOpen}
+              >
+                {restaurant.is_open ? <ToggleRight className="h-4 w-4 text-green-600" /> : <ToggleLeft className="h-4 w-4" />}
+                {togglingOpen ? "Updating..." : restaurant.is_open ? "Open" : "Closed"}
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                className="gap-1.5"
+                disabled={deletingRestaurant}
+                onClick={async () => {
+                  if (!confirm("Are you sure you want to delete this restaurant and all its menu items? This cannot be undone.")) return;
+                  setDeletingRestaurant(true);
+                  try {
+                    const { error: mErr } = await supabase.from("menu_items").delete().eq("restaurant_id", restaurant.id);
+                    if (mErr) throw mErr;
+                    const { error: rErr } = await supabase.from("restaurants").delete().eq("id", restaurant.id);
+                    if (rErr) throw rErr;
+                    toast.success("Restaurant deleted");
+                    queryClient.invalidateQueries({ queryKey: ["restaurants"] });
+                    navigate("/owner-dashboard");
+                  } catch (err: any) {
+                    toast.error(err.message || "Failed to delete restaurant");
+                    setDeletingRestaurant(false);
+                  }
+                }}
+              >
+                <Trash2 className="h-4 w-4" /> {deletingRestaurant ? "Deleting..." : "Delete"}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -174,15 +207,18 @@ const ManageRestaurantPage = () => {
                     <p className="text-sm text-muted-foreground">{item.category} · ₹{item.price.toFixed(2)}</p>
                   </div>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-destructive hover:bg-destructive/10"
-                  disabled={deleting === item.id}
-                  onClick={() => handleDeleteItem(item.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                <div className="flex items-center gap-1">
+                  <EditMenuItemDialog item={item} restaurantId={restaurant.id} />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-destructive hover:bg-destructive/10"
+                    disabled={deleting === item.id}
+                    onClick={() => handleDeleteItem(item.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             ))
           )}

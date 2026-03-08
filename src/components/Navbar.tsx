@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { ShoppingCart, User, Search, LogOut } from "lucide-react";
+import { ShoppingCart, User, Search, LogOut, Store } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { Badge } from "@/components/ui/badge";
@@ -53,8 +53,13 @@ const Navbar = () => {
             </Button>
           </Link>
           {user ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <NotificationBell />
+              <Link to="/owner-dashboard">
+                <Button variant="ghost" size="icon" className="text-muted-foreground" title="Owner Dashboard">
+                  <Store className="h-5 w-5" />
+                </Button>
+              </Link>
               <Link to="/profile">
                 <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground">
                   <User className="h-5 w-5" />
