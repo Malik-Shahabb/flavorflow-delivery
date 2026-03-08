@@ -43,20 +43,20 @@ const CheckoutPage = () => {
             <div className="mt-4 grid gap-4">
               <div>
                 <Label>Full Name</Label>
-                <Input required placeholder="John Doe" className="mt-1" />
+                <Input required placeholder="Rahul Sharma" className="mt-1" />
               </div>
               <div>
                 <Label>Address</Label>
-                <Input required placeholder="123 Main Street, Apt 4" className="mt-1" />
+                <Input required placeholder="42, Connaught Place, Block A" className="mt-1" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>City</Label>
-                  <Input required placeholder="New York" className="mt-1" />
+                  <Input required placeholder="New Delhi" className="mt-1" />
                 </div>
                 <div>
                   <Label>ZIP Code</Label>
-                  <Input required placeholder="10001" className="mt-1" />
+                  <Input required placeholder="110001" className="mt-1" />
                 </div>
               </div>
             </div>
@@ -74,7 +74,7 @@ const CheckoutPage = () => {
               </div>
               <div>
                 <Label>Email</Label>
-                <Input required type="email" placeholder="john@example.com" className="mt-1" />
+                <Input required type="email" placeholder="rahul@example.com" className="mt-1" />
               </div>
             </div>
           </div>

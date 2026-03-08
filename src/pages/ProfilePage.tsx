@@ -110,7 +110,7 @@ const ProfilePage = () => {
             <Input
               value={profile.full_name}
               onChange={(e) => setProfile((p) => ({ ...p, full_name: e.target.value }))}
-              placeholder="John Doe"
+              placeholder="Rahul Sharma"
               className="mt-1"
             />
           </div>
@@ -129,7 +129,7 @@ const ProfilePage = () => {
             <Input
               value={profile.address}
               onChange={(e) => setProfile((p) => ({ ...p, address: e.target.value }))}
-              placeholder="123 Main Street, City"
+              placeholder="42, Connaught Place, New Delhi"
               className="mt-1"
             />
           </div>
