@@ -48,17 +48,17 @@ const App = () => (
               <Routes>
                 {/* Public routes */}
                 <Route path="/" element={<Index />} />
-                <Route path="/restaurants" element={<RestaurantsPage />} />
-                <Route path="/restaurant/:id" element={<RestaurantDetailPage />} />
+                <Route path="/restaurants" element={<RoleGuard blockedRoles={["owner", "delivery"]}><RestaurantsPage /></RoleGuard>} />
+                <Route path="/restaurant/:id" element={<RoleGuard blockedRoles={["owner", "delivery"]}><RestaurantDetailPage /></RoleGuard>} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
                 <Route path="/about" element={<AboutPage />} />
 
-                {/* Protected routes */}
-                <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
-                <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
-                <Route path="/payment" element={<ProtectedRoute><PaymentPage /></ProtectedRoute>} />
-                <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
+                {/* Protected customer routes */}
+                <Route path="/cart" element={<ProtectedRoute><RoleGuard blockedRoles={["owner", "delivery"]}><CartPage /></RoleGuard></ProtectedRoute>} />
+                <Route path="/checkout" element={<ProtectedRoute><RoleGuard blockedRoles={["owner", "delivery"]}><CheckoutPage /></RoleGuard></ProtectedRoute>} />
+                <Route path="/payment" element={<ProtectedRoute><RoleGuard blockedRoles={["owner", "delivery"]}><PaymentPage /></RoleGuard></ProtectedRoute>} />
+                <Route path="/orders" element={<ProtectedRoute><RoleGuard blockedRoles={["owner", "delivery"]}><OrdersPage /></RoleGuard></ProtectedRoute>} />
                 <Route path="/register-restaurant" element={<ProtectedRoute><RegisterRestaurantPage /></ProtectedRoute>} />
                 <Route path="/manage-restaurant/:id" element={<ProtectedRoute><ManageRestaurantPage /></ProtectedRoute>} />
                 <Route path="/owner-dashboard" element={<ProtectedRoute><OwnerDashboardPage /></ProtectedRoute>} />
