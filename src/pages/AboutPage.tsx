@@ -10,7 +10,8 @@ const techStack = [
   { name: "React", desc: "Frontend UI library" },
   { name: "TypeScript", desc: "Type-safe JavaScript" },
   { name: "Tailwind CSS", desc: "Utility-first CSS framework" },
-  { name: "Lovable Cloud", desc: "Backend & Database" },
+  { name: "Django", desc: "Backend framework (Python)" },
+  { name: "PostgreSQL", desc: "Relational database" },
   { name: "Vite", desc: "Build tool & dev server" },
   { name: "React Router", desc: "Client-side routing" },
 ];
