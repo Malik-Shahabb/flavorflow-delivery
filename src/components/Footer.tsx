@@ -58,7 +58,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-10 border-t border-border pt-6 text-center text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} FeastFleet — Mini Project. Built with React, TypeScript & Lovable Cloud.</p>
+          <p>© {new Date().getFullYear()} FeastFleet — Mini Project. Built with React, TypeScript, Django & PostgreSQL.</p>
         </div>
       </div>
     </footer>
