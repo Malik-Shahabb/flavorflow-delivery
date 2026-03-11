@@ -92,27 +92,6 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* Team */}
-        <section>
-          <h2 className="font-serif text-2xl text-foreground flex items-center gap-2">
-            <Users className="h-6 w-6 text-primary" /> Project Team
-          </h2>
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              { name: "Team Member 1", role: "Full Stack Developer" },
-              { name: "Team Member 2", role: "UI/UX Designer" },
-              { name: "Team Member 3", role: "Backend Developer" },
-            ].map((m) => (
-              <div key={m.name} className="rounded-lg border border-border bg-card p-5 text-center">
-                <div className="mx-auto h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center text-2xl">
-                  👤
-                </div>
-                <p className="mt-3 font-semibold text-foreground">{m.name}</p>
-                <p className="text-xs text-muted-foreground">{m.role}</p>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* Contact Form */}
         <section>
